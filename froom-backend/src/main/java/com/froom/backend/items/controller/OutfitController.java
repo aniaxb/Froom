@@ -35,7 +35,7 @@ public class OutfitController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteOutfit/{id}")
     public void deleteOutfit() {
 
     }

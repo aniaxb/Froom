@@ -36,7 +36,7 @@ public class ItemController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deleteItem/{id}")
     public void deleteItem () {
 
     }
