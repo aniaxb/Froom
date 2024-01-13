@@ -9,8 +9,12 @@
     theme: {
       extend: {
         colors: {
-          darkgreen: '#2A543B',
-          caribbean: '#2C6463'
+          tearose: '#F7CBCA',
+          timberwolf: '#DDD3D3',
+          antiwhite: '#F1F7F7',
+          lightblue: '#BDD7D8',
+          raisinblack: '#2D2D34',
+          darkcyan: '#5B979A'
         }
       },
     },
