@@ -1,4 +1,4 @@
-import {Button, IconButton, MobileNav, Navbar, Typography} from '@material-tailwind/react';
+import {Button, Collapse, IconButton, Navbar, Typography} from '@material-tailwind/react';
 import {useState} from 'react';
 
 const NavBar = () => {
@@ -42,22 +42,22 @@ const NavBar = () => {
 
     return (
         <>
-            <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 lg:px-8 py-0 ">
+            <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 lg:px-10 py-0 ">
                 <div className="flex items-center justify-between text-blue-gray-900">
-                    <img src="/src/assets/froom_logo.png" className="w-28" alt="Froom logo"/>
-                    <div className="mr-4 hidden lg:block">{navList}</div>
+                    <img src="/src/assets/logos/froom_logo.png" className="w-28" alt="Froom logo"/>
+                    <div id="navList" className="mr-4 hidden lg:block">{navList}</div>
                     <div className="flex items-center gap-4">
                         {!isLoggedIn ? (
                             <div className="flex items-center gap-x-2">
                                 <Button
                                     variant="outlined"
-                                    size="sm"
+                                    size="lg"
                                     className="hidden lg:inline-block border-darkcyan"
                                 >
                                     <span>Log In</span>
                                 </Button>
                                 <Button
-                                    size="sm"
+                                    size="lg"
                                     className="hidden lg:inline-block bg-darkcyan"
                                 >
                                     <span>Sign In</span>
@@ -67,7 +67,7 @@ const NavBar = () => {
                             <div className="flex items-center gap-x-2">
                                 <Button
                                     variant="gradient"
-                                    size="sm"
+                                    size="lg"
                                     className="hidden lg:inline-block"
                                 >
                                     <span>Log Out</span>
@@ -113,7 +113,7 @@ const NavBar = () => {
                         </IconButton>
                     </div>
                 </div>
-                <MobileNav open={openNav}>
+                <Collapse open={openNav}>
                     {navList}
                     <div className="flex items-center gap-x-1">
                     <Button fullWidth variant="text" size="sm" className="">
@@ -123,7 +123,7 @@ const NavBar = () => {
                             <span>Sign in</span>
                         </Button>
                     </div>
-                </MobileNav>
+                </Collapse>
             </Navbar>
         </>
     );

@@ -27,6 +27,17 @@
 /*  color: #535bf2;*/
 /*}*/
 
+nav {
+  background-color: white !important;
+}
+
+nav li {
+  border-bottom: 2px solid white;
+}
+
+/*nav li:hover {*/
+/*  border-bottom: 2px solid #F7CBCA;*/
+/*}*/
 
 body {
   margin: 0;
@@ -55,12 +66,29 @@ button {
 button:hover {
   border-color: #F7CBCA;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+/*button:focus,*/
+/*button:focus-visible {*/
+/*  outline: 4px auto -webkit-focus-ring-color;*/
+/*}*/
 
 @media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a {
+    border-bottom: 1px solid white;
+  }
+  a:hover {
+    /*color: #F7CBCA;*/
+    border-bottom: 2px solid #F7CBCA;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
   :root {
     color: #213547;
     background-color: #ffffff;
