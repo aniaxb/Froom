@@ -39,6 +39,11 @@ nav li {
 /*  border-bottom: 2px solid #F7CBCA;*/
 /*}*/
 
+#categoryIcon:hover {
+  cursor: pointer;
+  background-color: #BDD7D8 !important;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -96,7 +101,7 @@ button:hover {
   a {
     border-bottom: 1px solid white;
   }
-  a:hover {
+  nav a:hover {
     /*color: #F7CBCA;*/
     border-bottom: 2px solid #F7CBCA;
   }
