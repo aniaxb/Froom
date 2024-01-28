@@ -1,12 +1,12 @@
-import CategoryMenu from "./CategoryMenu/CategoryMenu.tsx";
-import ClothingItems from "./ClothingItems/ClothingItems.tsx";
-import FilterSortAddItem from "./FilterMenu/FilterSortAddItem.tsx";
+import BodyPartMenu from './CategoryMenu/BodyPartMenu.tsx';
+import ClothingItems from './ClothingItems/ClothingItems.tsx';
+import FilterSortAddItem from './FilterMenu/FilterSortAddItem.tsx';
 
 const Wardrobe = () => (
     <>
         <div className='flex flex-row w-full py-4 px-10'>
             <div className='w-28 grow-0'>
-                <CategoryMenu/>
+                <BodyPartMenu/>
             </div>
             <div className='grow flex justify-center items-center'>
                 <div className='flex flex-col h-full w-full pl-10'>
