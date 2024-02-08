@@ -1,5 +1,6 @@
 import {Button, Collapse, IconButton, Navbar, Typography} from '@material-tailwind/react';
 import {useState} from 'react';
+import {Link, NavLink} from 'react-router-dom';
 
 const NavBar = () => {
     const [openNav, setOpenNav] = useState(false);
@@ -13,9 +14,9 @@ const NavBar = () => {
                 color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <a href="#" className="flex items-center">
+                <NavLink to="/about">
                     About
-                </a>
+                </NavLink>
             </Typography>
             <Typography
                 as="li"
@@ -23,9 +24,9 @@ const NavBar = () => {
                 color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <a href="#" className="flex items-center">
+                <NavLink to="/contact" >
                     Contact
-                </a>
+                </NavLink>
             </Typography>
             <Typography
                 as="li"
@@ -33,18 +34,20 @@ const NavBar = () => {
                 color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <a href="#" className="flex items-center">
+                <NavLink to="/wardrobe" >
                     Wardrobe
-                </a>
+                </NavLink>
             </Typography>
         </ul>
     );
 
     return (
         <>
-            <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 lg:px-10 py-0 ">
+            <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 lg:px-10 py-0">
                 <div className="flex items-center justify-between text-blue-gray-900">
-                    <img src="/src/assets/logos/froom_logo.png" className="w-28" alt="Froom logo"/>
+                    <Link to={'/'} className='image-link'>
+                        <img src="/src/assets/logos/froom_logo.png" className="w-28" alt="Froom logo"/>
+                    </Link>
                     <div id="navList" className="mr-4 hidden lg:block">{navList}</div>
                     <div className="flex items-center gap-4">
                         {!isLoggedIn ? (
@@ -115,8 +118,8 @@ const NavBar = () => {
                 </div>
                 <Collapse open={openNav}>
                     {navList}
-                    <div className="flex items-center gap-x-1">
-                    <Button fullWidth variant="text" size="sm" className="">
+                    <div className="flex items-center gap-x-1 my-2">
+                    <Button fullWidth variant="outlined" size="sm" className="">
                             <span>Log In</span>
                         </Button>
                         <Button fullWidth variant="gradient" size="sm" className="">
