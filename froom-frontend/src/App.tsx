@@ -1,18 +1,21 @@
-import NavBar from './components/NavBar/NavBar.tsx';
 import Wardrobe from './components/Wardrobe/Wardrobe.tsx';
+import {Route, Routes} from 'react-router-dom';
+import Landing from './components/Landing/Landing.tsx';
+import About from './components/About/About.tsx';
+import Contact from './components/Contact/Contact.tsx';
 
 function App() {
 
   return (
       <>
-          <div className="min-h-screen flex flex-col">
-              <NavBar />
-              <div className="flex-1 flex flex-col justify-center items-center w-screen">
-                <Wardrobe/>
-              </div>
-          </div>
+          <Routes>
+              <Route path={'/'} element={<Landing/>}></Route>
+              <Route path={'/about'} element={<About />}></Route>
+              <Route path={'/contact'} element={<Contact />}></Route>
+              <Route path={'/wardrobe'} element={<Wardrobe />}></Route>
+          </Routes>
       </>
   )
 }
 
-export default App
+export  default App

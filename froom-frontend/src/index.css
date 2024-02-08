@@ -35,14 +35,27 @@ nav li {
   border-bottom: 2px solid white;
 }
 
-/*nav li:hover {*/
-/*  border-bottom: 2px solid #F7CBCA;*/
-/*}*/
+nav li .active {
+  border-bottom: 2px solid #F7CBCA;
+}
+
+
+.image-link{
+  border-bottom: none;
+}
+
+.image-link:hover {
+  border-bottom: none;
+}
 
 #categoryIcon:hover {
   cursor: pointer;
   background-color: #BDD7D8 !important;
 }
+
+/*#categoryIcon .active{*/
+/*  background-color: #F7CBCA !important;*/
+/*}*/
 
 body {
   margin: 0;
@@ -68,9 +81,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #F7CBCA;
 }
+
 /*button:focus,*/
 /*button:focus-visible {*/
 /*  outline: 4px auto -webkit-focus-ring-color;*/
