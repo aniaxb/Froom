@@ -14,7 +14,7 @@ const NavBar = () => {
                 color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <NavLink to="/about">
+                <NavLink to="/about" className="navbar-link">
                     About
                 </NavLink>
             </Typography>
@@ -24,7 +24,7 @@ const NavBar = () => {
                 color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <NavLink to="/contact" >
+                <NavLink to="/contact" className="navbar-link">
                     Contact
                 </NavLink>
             </Typography>
@@ -34,7 +34,7 @@ const NavBar = () => {
                 color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <NavLink to="/wardrobe" >
+                <NavLink to="/wardrobe" className="navbar-link">
                     Wardrobe
                 </NavLink>
             </Typography>
@@ -52,19 +52,23 @@ const NavBar = () => {
                     <div className="flex items-center gap-4">
                         {!isLoggedIn ? (
                             <div className="flex items-center gap-x-2">
-                                <Button
-                                    variant="outlined"
-                                    size="lg"
-                                    className="hidden lg:inline-block border-darkcyan"
-                                >
-                                    <span>Log In</span>
-                                </Button>
-                                <Button
-                                    size="lg"
-                                    className="hidden lg:inline-block bg-darkcyan"
-                                >
-                                    <span>Sign In</span>
-                                </Button>
+                                <NavLink to="/login" className="sign-button">
+                                    <Button
+                                        variant="outlined"
+                                        size="lg"
+                                        className="hidden lg:inline-block border-darkcyan"
+                                    >
+                                        <span>Log In</span>
+                                    </Button>
+                                </NavLink>
+                                <NavLink to="/register" className="sign-button">
+                                    <Button
+                                        size="lg"
+                                        className="hidden lg:inline-block bg-darkcyan"
+                                    >
+                                        <span>Sign In</span>
+                                    </Button>
+                                </NavLink>
                             </div>
                         ) : (
                             <div className="flex items-center gap-x-2">
@@ -119,9 +123,11 @@ const NavBar = () => {
                 <Collapse open={openNav}>
                     {navList}
                     <div className="flex items-center gap-x-1 my-2">
-                    <Button fullWidth variant="outlined" size="sm" className="">
-                            <span>Log In</span>
-                        </Button>
+                        <NavLink to="/login" >
+                            <Button fullWidth variant="outlined" size="sm" className="">
+                                <span>Log In</span>
+                            </Button>
+                        </NavLink>
                         <Button fullWidth variant="gradient" size="sm" className="">
                             <span>Sign in</span>
                         </Button>
