@@ -3,6 +3,8 @@ import {Route, Routes} from 'react-router-dom';
 import Landing from './components/Landing/Landing.tsx';
 import About from './components/About/About.tsx';
 import Contact from './components/Contact/Contact.tsx';
+import Login from './components/Login/Login.tsx';
+import Register from './components/Register/Register.tsx';
 
 function App() {
 
@@ -13,6 +15,8 @@ function App() {
               <Route path={'/about'} element={<About />}></Route>
               <Route path={'/contact'} element={<Contact />}></Route>
               <Route path={'/wardrobe'} element={<Wardrobe />}></Route>
+              <Route path={'/login'} element={<Login />}></Route>
+              <Route path={'/register'} element={<Register />}></Route>
           </Routes>
       </>
   )
