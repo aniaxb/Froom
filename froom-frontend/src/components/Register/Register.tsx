@@ -9,6 +9,7 @@ const Register = () => {
     }
     return (
         <>
+
             <div className="mt-2 right-10 absolute flex flex-col justify-center items-center gap-4">
                 <Link to={'/'} className='image-link'>
                     <img src="/src/assets/logos/froom_logo.png" className="w-28" alt="Froom logo"/>

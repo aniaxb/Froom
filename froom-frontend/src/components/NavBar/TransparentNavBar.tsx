@@ -11,30 +11,27 @@ const NavBar = () => {
             <Typography
                 as="li"
                 variant="lead"
-                color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <NavLink to="/about" className="navbar-link">
+                <NavLink to="/about" className="hover:text-darkcyan">
                     About
                 </NavLink>
             </Typography>
             <Typography
                 as="li"
                 variant="lead"
-                color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <NavLink to="/contact" className="navbar-link">
+                <NavLink to="/contact" className="hover:text-darkcyan">
                     Contact
                 </NavLink>
             </Typography>
             <Typography
                 as="li"
                 variant="lead"
-                color="blue-gray"
                 className="p-1 font-semibold"
             >
-                <NavLink to="/wardrobe" className="navbar-link">
+                <NavLink to="/wardrobe" className="hover:text-darkcyan">
                     Wardrobe
                 </NavLink>
             </Typography>
@@ -43,8 +40,8 @@ const NavBar = () => {
 
     return (
         <>
-            <Navbar id="white-navbar" className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 lg:px-10 py-0 bg-white backdrop-saturate-0">
-                <div className="flex items-center justify-between text-blue-gray-900">
+            <Navbar id="transparent-navbar" className="backdrop-blur-none top-0 z-10 h-max max-w-full rounded-none px-4 lg:px-10 py-0 lg:bg-transparent bg-white shadow-none border-0 backdrop-saturate-100">
+                <div className="flex items-center justify-between">
                     <Link to={'/'} className='image-link'>
                         <img src="/src/assets/logos/froom_logo.png" className="w-28" alt="Froom logo"/>
                     </Link>
@@ -56,7 +53,7 @@ const NavBar = () => {
                                     <Button
                                         variant="outlined"
                                         size="lg"
-                                        className="hidden lg:inline-block border-darkcyan"
+                                        className="hidden lg:inline-block border-darkcyan text-white"
                                     >
                                         <span>Log In</span>
                                     </Button>
@@ -120,7 +117,7 @@ const NavBar = () => {
                         </IconButton>
                     </div>
                 </div>
-                <Collapse open={openNav}>
+                <Collapse open={openNav} className="text-black">
                     {navList}
                     <div className="flex items-center gap-x-1 my-2">
                         <NavLink to="/login" className="w-1/2">
