@@ -6,7 +6,7 @@ import java.util.*
 data class ItemDto(
     val uuid: UUID,
     val category: Category,
-    val color: List<Int>,
+    val color: List<String>,
     val image: String,
     val imageFormat: String
 )

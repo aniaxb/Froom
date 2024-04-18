@@ -16,17 +16,20 @@ class Item (
     val uuid: UUID = UUID.randomUUID(),
 
     @Enumerated(EnumType.STRING)
-    val category: Category,
+    var category: Category,
+
+    @Enumerated(EnumType.STRING)
+    var bodyPart: BodyPart,
 
     @ElementCollection
     @CollectionTable(name = "item_color", joinColumns = [JoinColumn(name = "item_id")])
     @Column(name = "color")
-    val color: List<Int>,
+    var color: List<String>,
 
     @Lob
-    val image: ByteArray,
+    var image: ByteArray,
 
-    val imageFormat: String,
+    var imageFormat: String,
 
     @ManyToMany(mappedBy = "items")
     val outfits: MutableList<Outfit> = mutableListOf(),
