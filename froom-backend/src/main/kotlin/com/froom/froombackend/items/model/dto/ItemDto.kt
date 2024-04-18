@@ -3,9 +3,10 @@ package com.froom.froombackend.items.model.dto
 import com.froom.froombackend.items.model.domain.Category
 import java.util.*
 
-data class ItemDto (
+data class ItemDto(
     val uuid: UUID,
     val category: Category,
     val color: List<Int>,
-    val image: ByteArray
+    val image: String,
+    val imageFormat: String
 )
