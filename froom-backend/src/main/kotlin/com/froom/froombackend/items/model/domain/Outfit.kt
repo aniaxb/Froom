@@ -6,16 +6,16 @@ import org.hibernate.annotations.GenericGenerator
 import java.util.*
 
 @Entity
-class Outfit (
+class Outfit(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
+    val id: Int?,
 
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     val uuid: UUID = UUID.randomUUID(),
 
-    val name: String,
+    var name: String,
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -27,5 +27,5 @@ class Outfit (
         joinColumns = [JoinColumn(name = "outfit_id")],
         inverseJoinColumns = [JoinColumn(name = "item_id")]
     )
-    val items: MutableList<Item> = mutableListOf()
+    var items: MutableList<Item> = mutableListOf()
 )
