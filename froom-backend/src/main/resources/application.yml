@@ -1,0 +1,35 @@
+spring:
+    config:
+        import: optional:file:.env[.properties]
+
+    application:
+        name: Froom
+
+    datasource:
+        username: ${POSTGRES_USER:#{user}}
+        password: ${POSTGRES_PASSWORD:#{password}}
+        url: ${POSTGRES_URL}
+    jpa:
+        show-sql: true
+        hibernate.ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+
+    security:
+        algorithm: HmacSHA256
+        jwt:
+            secret: ${JWT_SECRET}
+            prefix: ${JWT_PREFIX}
+            access:
+                expiration: ${JWT_ACCESS_EXPIRATION}
+                unit: ${JWT_ACCESS_EXPIRATION_UNIT}
+            refresh:
+                expiration: ${JWT_REFRESH_EXPIRATION}
+                unit: ${JWT_REFRESH_EXPIRATION_UNIT}
+
+    kafka:
+        bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
