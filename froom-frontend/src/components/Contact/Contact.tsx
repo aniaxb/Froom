@@ -10,7 +10,7 @@ const Contact = () => {
                 <Card className="w-3/4 xl:w-1/2 shadow-2xl xl:p-4">
                     <CardBody>
                         <div className="flex justify-between items-end">
-                            <Typography variant="h1" className="mb-4">
+                            <Typography variant="h1" color="blue-gray" className="mb-4">
                                 Contact
                             </Typography>
                             <img src="/src/assets/logos/froom_logo.png" alt="Froom logo" className="w-28 h-28"/>
@@ -105,7 +105,7 @@ const Contact = () => {
                     <CardFooter className="pt-0">
                         <hr/>
                         <div className="flex flex-col gap-4 mt-4">
-                            <Typography variant="h2">Send us a message</Typography>
+                            <Typography variant="h2" color="blue-gray">Send us a message</Typography>
                             <Input label="Topic"/>
                             <Textarea size="lg" label="Message" />
                             <Button>Send Message</Button>

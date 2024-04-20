@@ -12,6 +12,7 @@ import About from './components/About/About.tsx';
 import Contact from './components/Contact/Contact.tsx';
 import Login from './components/Login/Login.tsx';
 import Register from './components/Register/Register.tsx';
+import Profile from './components/Profile/Profile.tsx';
 
 const router = createBrowserRouter([
     {
@@ -20,11 +21,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/about',
-        element: <About />,
+        element: <About />
     },
     {
         path: '/contact',
-        element: <Contact/>,
+        element: <Contact/>
     },
     {
         path:'/wardrobe',
@@ -32,12 +33,16 @@ const router = createBrowserRouter([
     },
     {
         path: '/login',
-        element: <Login />,
+        element: <Login />
     },
     {
         path: '/register',
-        element: <Register />,
+        element: <Register />
     },
+    {
+        path: '/profile',
+        element: <Profile />
+    }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

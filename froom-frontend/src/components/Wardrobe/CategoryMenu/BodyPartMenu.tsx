@@ -11,9 +11,6 @@ const BodyPartMenu = () => {
     return (
         <>
             <div id='bodypart' className='flex flex-col justify-between h-full'>
-                {/*    <div id='categoryIcon' className='bg-tearose rounded-lg flex justify-center items-center'>*/}
-                {/*        <img className='p-2 w-36' src="/src/assets/clothingItems/tshirt icon.png" alt="Upper clothes category" />*/}
-                {/*    </div>*/}
                 <div
                     id='categoryIcon'
                     onClick={() => handleCategoryClick('upper')}
