@@ -30,7 +30,7 @@ class ItemService (
     val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     fun getAllItems(user: User): List<ItemDto> {
-        logger.info("User items retrieved: ${user.userName}")
+        logger.info("User items retrieved: ${user.username}")
         itemRepository.findByUserUuid(user.uuid).let {
             return it.map { item -> item.toDto() }
         }
@@ -111,7 +111,7 @@ class ItemService (
 
     @Transactional
     fun getItemsByFilter(category: Category?, bodyPart: BodyPart?, color: List<String>?, user: User): List<ItemDto> {
-        val items = itemRepository.findItemsByFilter(category, bodyPart, color, user)
+        val items = itemRepository.findItemsByCategoryAndBodyPartAndColorInAndUser(category, bodyPart, color, user)
         return items.map { item -> item.toDto() }
     }
 

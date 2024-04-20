@@ -20,13 +20,19 @@ class User(
     @Column(unique = true)
     val uuid: UUID = UUID.randomUUID(),
 
-    var userName: String,
+    @Column
+    var firstName: String,
+
+    @Column
+    var lastName: String,
+
+    @Column
+    var username: String,
 
     @Column(unique = true)
     var email: String,
 
     var password: String,
 
-    var birthDate: Date,
 
-)
+    )

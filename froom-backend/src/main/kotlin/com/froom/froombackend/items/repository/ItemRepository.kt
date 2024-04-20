@@ -14,5 +14,10 @@ interface ItemRepository: JpaRepository<Item, Int> {
 
     fun findByUserUuid(userUuid: UUID): List<Item>
 
-    fun findItemsByFilter(category: Category?, bodyPart: BodyPart?, color: List<String>?, user: User): List<Item>
+    fun findItemsByCategoryAndBodyPartAndColorInAndUser(
+        category: Category?,
+        bodyPart: BodyPart?,
+        color: List<String>?,
+        user: User
+    ): List<Item>
 }
