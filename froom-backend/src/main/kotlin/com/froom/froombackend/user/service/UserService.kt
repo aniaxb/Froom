@@ -56,7 +56,7 @@ class UserService (
             firstName = command.firstName,
             lastName = command.lastName,
             email = command.email,
-            password = command.password,
+            password = hashService.hashBcrypt(command.password),
             username = command.username
         )
         return userRepository.save(user)

@@ -29,6 +29,7 @@ class ItemService (
 
     val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
+    @Transactional
     fun getAllItems(user: User): List<ItemDto> {
         logger.info("User items retrieved: ${user.username}")
         itemRepository.findByUserUuid(user.uuid).let {
@@ -50,7 +51,7 @@ class ItemService (
     fun createItem(file: MultipartFile, user: User): ItemDto {
         return try {
             val categoryDeferred: Deferred<Category> = CoroutineScope(Dispatchers.Default).async { getCategory(file) }
-            val colorDeferred: Deferred<List<Int>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
+            val colorDeferred: Deferred<List<String>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
 
             val (category, color) = runBlocking {
                 awaitAll(categoryDeferred, colorDeferred)
@@ -115,7 +116,7 @@ class ItemService (
         return items.map { item -> item.toDto() }
     }
 
-    fun getColor(file: MultipartFile): List<Int> {
+    fun getColor(file: MultipartFile): List<String> {
         return colorExtraction.getColor(file)
     }
 

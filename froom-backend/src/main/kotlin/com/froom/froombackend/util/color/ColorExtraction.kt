@@ -5,8 +5,8 @@ import org.springframework.web.multipart.MultipartFile
 
 @Component
 class ColorExtraction {
-    fun getColor(file: MultipartFile): List<Int> {
+    fun getColor(file: MultipartFile): List<String> {
         println("Color extracted")
-        return listOf("#FF0000", "#00FF00", "#0000FF").map { it.substring(1).toInt(16) }
+        return listOf("#FF0000", "#00FF00", "#0000FF").map { it.substring(1) }
     }
 }
