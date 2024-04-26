@@ -111,9 +111,22 @@ class ItemService (
     }
 
     @Transactional
-    fun getItemsByFilter(category: Category?, bodyPart: BodyPart?, color: List<String>?, user: User): List<ItemDto> {
-        val items = itemRepository.findItemsByCategoryAndBodyPartAndColorInAndUser(category, bodyPart, color, user)
-        return items.map { item -> item.toDto() }
+    fun getItemsByFilter(category: Category?, bodyPart: BodyPart?, color: String?, user: User): List<ItemDto> {
+        val filteredItems = mutableListOf<Item>()
+
+        if (category != null) {
+            filteredItems.addAll(itemRepository.findByCategoryAndUserUuid(category, user.uuid))
+        }
+
+        if (bodyPart != null) {
+            filteredItems.addAll(itemRepository.findByBodyPartAndUserUuid(bodyPart, user.uuid))
+        }
+
+        if (color != null) {
+            filteredItems.addAll(itemRepository.findByColorAndUserUuid(color, user.uuid))
+        }
+
+        return filteredItems.map { it.toDto() }
     }
 
     fun getColor(file: MultipartFile): List<String> {

@@ -66,7 +66,7 @@ class ItemController (val itemService: ItemService) {
     fun getItemsByFilter(
         @RequestParam(required = false) category: Category?,
         @RequestParam(required = false) bodyPart: BodyPart?,
-        @RequestParam(required = false) color: List<String>?,
+        @RequestParam(required = false) color: String?,
         authentication: Authentication
     ): ResponseEntity<List<ItemDto>> {
         return ResponseEntity<List<ItemDto>>(itemService.getItemsByFilter(category, bodyPart, color, authentication.toUser()),
