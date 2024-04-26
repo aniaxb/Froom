@@ -9,6 +9,7 @@ fun Item.toDto(): ItemDto {
     return ItemDto(
         uuid = this.uuid,
         category = this.category,
+        bodyPart = this.bodyPart,
         color = this.color,
         image = base64Image,
         imageFormat = this.imageFormat
