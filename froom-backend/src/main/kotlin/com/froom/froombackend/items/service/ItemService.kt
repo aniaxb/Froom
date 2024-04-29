@@ -8,15 +8,17 @@ import com.froom.froombackend.items.model.dto.ItemDto
 import com.froom.froombackend.items.repository.ItemRepository
 import com.froom.froombackend.items.util.toDto
 import com.froom.froombackend.user.model.domain.User
+import com.froom.froombackend.util.analysis.AnalysisAdapter
+import com.froom.froombackend.util.analysis.model.AnalysisResponseDto
 import com.froom.froombackend.util.category.CategoryPrediction
 import com.froom.froombackend.util.color.ColorExtraction
 import jakarta.transaction.Transactional
+import kotlinx.coroutines.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.util.UUID
-import kotlinx.coroutines.*
+import java.util.*
 
 
 @Service
@@ -24,6 +26,7 @@ class ItemService (
     val itemRepository: ItemRepository,
     val categoryPrediction: CategoryPrediction,
     val colorExtraction: ColorExtraction,
+    val analysisAdapter: AnalysisAdapter
 ) {
     val NOT_FOUND: String = "Item not found"
 
@@ -48,27 +51,32 @@ class ItemService (
     }
 
     @Transactional
-    fun createItem(file: MultipartFile, user: User): ItemDto {
+    suspend fun createItem(file: MultipartFile, user: User): ItemDto {
         return try {
             val categoryDeferred: Deferred<Category> = CoroutineScope(Dispatchers.Default).async { getCategory(file) }
-            val colorDeferred: Deferred<List<String>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
+//            val colorDeferred: Deferred<Pair<List<String>, ByteArray>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
 
-            val (category, color) = runBlocking {
-                awaitAll(categoryDeferred, colorDeferred)
-            }
+            val category: Category = runBlocking { categoryDeferred.await() }
+
+//            val (color, image) = runBlocking {
+//                colorDeferred.await()
+//            }
+
 
             val item = Item (
                 id = null,
                 user = user,
-                category = category as Category,
-                color = color as List<String>,
-                bodyPart = BodyPart.TOP,
+                category = category,
+                color = listOf("black", "white"),
+                bodyPart = category.bodyPart,
                 image = file.bytes,
                 imageFormat = file.contentType!!
             )
 
             logger.info("Item created: $item")
-            itemRepository.save(item).toDto()
+            withContext(Dispatchers.IO) {
+                itemRepository.save(item)
+            }.toDto()
 
         } catch (e: Exception) {
             throw Exception("Error creating item: ${e.message}")
@@ -129,11 +137,15 @@ class ItemService (
         return filteredItems.map { it.toDto() }
     }
 
-    fun getColor(file: MultipartFile): List<String> {
+    fun getColor(file: MultipartFile): Pair<List<String>, ByteArray> {
         return colorExtraction.getColor(file)
     }
 
     fun getCategory(file: MultipartFile): Category {
         return categoryPrediction.getCategory(file)
+    }
+
+    fun getAnalysis(file: MultipartFile): AnalysisResponseDto {
+        return analysisAdapter.getAnalysis(file)
     }
 }

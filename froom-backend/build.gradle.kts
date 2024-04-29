@@ -40,6 +40,10 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+	implementation("com.squareup.retrofit2:retrofit:2.9.0")
+	implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
+	implementation("org.reactivestreams:reactive-streams:1.0.3")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.0")
 }
 
 tasks.withType<KotlinCompile> {
