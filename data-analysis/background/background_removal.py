@@ -1,16 +1,26 @@
+import logging
 from rembg import remove
+import os
+from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 
-def remove_background(image_file):
-    # Read the contents of the image file
+async def remove_background(image_file):
+
     image_data = image_file.read()
 
-    # Perform background removal
     image_data_out = remove(image_data)
 
-    # Write the processed image data to a new file
-    with open('rb_output.jpg', 'wb') as f_out:
+    logger.info('Background removed successfully')
+
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    output_image_path = f'rb_output_{timestamp}.jpg'
+
+    with open(output_image_path, 'wb') as f_out:
         f_out.write(image_data_out)
 
-    # Return a message indicating successful background removal
-    return {'message': 'Background removed successfully', 'output_image': 'rb_output.jpg'}
+    if os.path.exists(output_image_path):
+        return {'message': 'Background removed successfully', 'output_image': output_image_path}
+    else:
+        return {'error': 'Failed to save the output image file'}
