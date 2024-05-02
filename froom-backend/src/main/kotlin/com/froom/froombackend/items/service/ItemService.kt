@@ -11,12 +11,12 @@ import com.froom.froombackend.user.model.domain.User
 import com.froom.froombackend.util.category.CategoryPrediction
 import com.froom.froombackend.util.color.ColorExtraction
 import jakarta.transaction.Transactional
+import kotlinx.coroutines.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
-import java.util.UUID
-import kotlinx.coroutines.*
+import java.util.*
 
 
 @Service
@@ -51,19 +51,21 @@ class ItemService (
     fun createItem(file: MultipartFile, user: User): ItemDto {
         return try {
             val categoryDeferred: Deferred<Category> = CoroutineScope(Dispatchers.Default).async { getCategory(file) }
-            val colorDeferred: Deferred<List<String>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
+            val colorDeferred: Deferred<Pair<List<String>, ByteArray>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
 
-            val (category, color) = runBlocking {
-                awaitAll(categoryDeferred, colorDeferred)
+            val category = runBlocking { categoryDeferred.await() }
+
+            val (color, image) = runBlocking {
+                colorDeferred.await()
             }
 
             val item = Item (
                 id = null,
                 user = user,
-                category = category as Category,
-                color = color as List<String>,
-                bodyPart = BodyPart.TOP,
-                image = file.bytes,
+                category = category,
+                color = color,
+                bodyPart = category.bodyPart,
+                image = image,
                 imageFormat = file.contentType!!
             )
 
@@ -74,6 +76,8 @@ class ItemService (
             throw Exception("Error creating item: ${e.message}")
         }
     }
+
+
 
     @Transactional
     fun deleteItem(uuid: UUID, user: User) {
@@ -129,7 +133,7 @@ class ItemService (
         return filteredItems.map { it.toDto() }
     }
 
-    fun getColor(file: MultipartFile): List<String> {
+    fun getColor(file: MultipartFile): Pair<List<String>, ByteArray> {
         return colorExtraction.getColor(file)
     }
 

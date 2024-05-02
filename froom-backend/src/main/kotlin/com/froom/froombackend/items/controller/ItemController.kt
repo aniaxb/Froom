@@ -39,7 +39,7 @@ class ItemController (val itemService: ItemService) {
     }
 
     @PostMapping("/create")
-    fun createItem(@RequestParam("image") file: MultipartFile, authentication: Authentication): ResponseEntity<ItemDto> {
+    suspend fun createItem(@RequestParam("image") file: MultipartFile, authentication: Authentication): ResponseEntity<ItemDto> {
         return ResponseEntity<ItemDto> (itemService.createItem(file, authentication.toUser()),
             HttpStatus.CREATED)
     }

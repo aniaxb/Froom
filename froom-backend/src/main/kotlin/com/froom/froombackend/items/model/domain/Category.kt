@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 enum class Category(name: String, val bodyPart: BodyPart, val index: Int) {
-    T_SHIRT_TOP("T-Shirt/Top", BodyPart.TOP, 0),
+    TSHIRT("TShirt", BodyPart.TOP, 0),
     TROUSERS("Trousers", BodyPart.BOTTOM, 1),
     PULLOVER("Pullover", BodyPart.TOP, 2),
     DRESS("Dress", BodyPart.TOP, 3),
