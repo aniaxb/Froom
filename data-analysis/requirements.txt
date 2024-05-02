@@ -6,3 +6,4 @@ webcolors~=1.13
 pillow~=10.3.0
 tensorflow~=2.16.1
 keras~=3.3.3
+python-dotenv~=1.0.1

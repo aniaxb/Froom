@@ -13,44 +13,6 @@ api = Blueprint('api', __name__)
 logger = logging.getLogger(__name__)
 
 
-@api.route('/analyse', methods=['POST'])
-async def analyze_image():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image provided'}), 400
-
-    image = request.files['image']
-
-    # Create remove background and predict category tasks
-    remove_background_task = asyncio.create_task(remove_background(image))
-    category_task = asyncio.create_task(detect_category(image))
-
-    processed_image_info = await remove_background_task
-
-    if 'error' in processed_image_info:
-        return jsonify(processed_image_info), 500
-
-    # Call detect_colors function for image with removed background
-    colors = detect_colors(processed_image_info['output_image'])
-
-    # Read the processed image data
-    with open(processed_image_info['output_image'], 'rb') as f:
-        image_data = f.read()
-
-    # Encode the image data as base64
-    encoded_image_data = base64.b64encode(image_data).decode('utf-8')
-
-    # Remove the output image file
-    os.remove(processed_image_info['output_image'])
-
-    predicted_category, prediction_confidence = await category_task
-
-    return jsonify({
-        'colors': colors,
-        'image': encoded_image_data,
-        'category': predicted_category,
-        'confidence': prediction_confidence
-    })
-
 @api.route('/extractColor', methods=['POST'])
 async def background_and_color():
     if 'image' not in request.files:
@@ -88,19 +50,18 @@ async def background_and_color():
 @api.route('/predictCategory', methods=['POST'])
 def predict():
     if 'image' not in request.files:
+        logger.error('No image part')
         return jsonify({'error': 'No image provided'}), 400
 
     image_file = request.files['image']
 
-    try:
-        predicted_label, confidence = detect_category(image_file)
+    predicted_label, confidence = detect_category(image_file)
 
-        # Check if prediction is successful
-        if predicted_label is not None and confidence is not None:
-            return jsonify({'category': predicted_label, 'confidence': float(confidence)})
-        else:
-            return jsonify({'error': 'Error predicting category'}), 500
-
-    except Exception as e:
-        logger.error('Error predicting category: %s', str(e))
+    # Check if prediction is successful
+    if predicted_label is not None and confidence is not None:
+        return jsonify({
+            'category': predicted_label,
+            'confidence': confidence
+        })
+    else:
         return jsonify({'error': 'Error predicting category'}), 500

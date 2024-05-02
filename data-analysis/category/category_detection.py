@@ -32,7 +32,6 @@ def detect_category(file):
 
     predictions = model.predict(img_array)
     class_index = np.argmax(predictions)
-
     os.remove(image_path)
     logger.info("Image removed from %s", image_path)
 
