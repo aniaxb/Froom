@@ -26,7 +26,7 @@ create table public.item
     category varchar(255)
         constraint item_category_type_check
             check ((category)::text = ANY
-        ((ARRAY ['T_SHIRT_TOP'::character varying, 'TROUSERS'::character varying, 'PULLOVER'::character varying, 'DRESS'::character varying, 'COAT'::character varying, 'SANDALS'::character varying, 'SHIRT'::character varying, 'SNEAKERS'::character varying, 'BAG'::character varying, 'ANKLE_BOOTS'::character varying, 'UNKNOWN'::character varying])::text[])),
+        ((ARRAY ['TSHIRT'::character varying, 'TROUSERS'::character varying, 'PULLOVER'::character varying, 'DRESS'::character varying, 'COAT'::character varying, 'SANDALS'::character varying, 'SHIRT'::character varying, 'SNEAKERS'::character varying, 'BAG'::character varying, 'ANKLE_BOOTS'::character varying, 'UNKNOWN'::character varying])::text[])),
     image_format  varchar(255),
     image         oid
 );

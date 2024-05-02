@@ -8,8 +8,6 @@ import com.froom.froombackend.items.model.dto.ItemDto
 import com.froom.froombackend.items.repository.ItemRepository
 import com.froom.froombackend.items.util.toDto
 import com.froom.froombackend.user.model.domain.User
-import com.froom.froombackend.util.analysis.AnalysisAdapter
-import com.froom.froombackend.util.analysis.model.AnalysisResponseDto
 import com.froom.froombackend.util.category.CategoryPrediction
 import com.froom.froombackend.util.color.ColorExtraction
 import jakarta.transaction.Transactional
@@ -26,7 +24,6 @@ class ItemService (
     val itemRepository: ItemRepository,
     val categoryPrediction: CategoryPrediction,
     val colorExtraction: ColorExtraction,
-    val analysisAdapter: AnalysisAdapter
 ) {
     val NOT_FOUND: String = "Item not found"
 
@@ -51,37 +48,36 @@ class ItemService (
     }
 
     @Transactional
-    suspend fun createItem(file: MultipartFile, user: User): ItemDto {
+    fun createItem(file: MultipartFile, user: User): ItemDto {
         return try {
             val categoryDeferred: Deferred<Category> = CoroutineScope(Dispatchers.Default).async { getCategory(file) }
-//            val colorDeferred: Deferred<Pair<List<String>, ByteArray>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
+            val colorDeferred: Deferred<Pair<List<String>, ByteArray>> = CoroutineScope(Dispatchers.Default).async { getColor(file) }
 
-            val category: Category = runBlocking { categoryDeferred.await() }
+            val category = runBlocking { categoryDeferred.await() }
 
-//            val (color, image) = runBlocking {
-//                colorDeferred.await()
-//            }
-
+            val (color, image) = runBlocking {
+                colorDeferred.await()
+            }
 
             val item = Item (
                 id = null,
                 user = user,
                 category = category,
-                color = listOf("black", "white"),
+                color = color,
                 bodyPart = category.bodyPart,
-                image = file.bytes,
+                image = image,
                 imageFormat = file.contentType!!
             )
 
             logger.info("Item created: $item")
-            withContext(Dispatchers.IO) {
-                itemRepository.save(item)
-            }.toDto()
+            itemRepository.save(item).toDto()
 
         } catch (e: Exception) {
             throw Exception("Error creating item: ${e.message}")
         }
     }
+
+
 
     @Transactional
     fun deleteItem(uuid: UUID, user: User) {
@@ -143,9 +139,5 @@ class ItemService (
 
     fun getCategory(file: MultipartFile): Category {
         return categoryPrediction.getCategory(file)
-    }
-
-    fun getAnalysis(file: MultipartFile): AnalysisResponseDto {
-        return analysisAdapter.getAnalysis(file)
     }
 }
