@@ -77,7 +77,22 @@ class ItemService (
         }
     }
 
-
+    @Transactional
+    fun createItemWithoutDataAnalysis(file: MultipartFile, user: User): ItemDto {
+        val category = Category.UNKNOWN
+        val color = listOf("unknown")
+        val item = Item (
+            id = null,
+            user = user,
+            category = category,
+            color = color,
+            bodyPart = category.bodyPart,
+            image = file.bytes,
+            imageFormat = file.contentType!!
+        )
+        logger.info("Item created: $item")
+        return itemRepository.save(item).toDto()
+    }
 
     @Transactional
     fun deleteItem(uuid: UUID, user: User) {

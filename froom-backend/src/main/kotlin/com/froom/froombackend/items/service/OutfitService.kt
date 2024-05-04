@@ -154,7 +154,7 @@ class OutfitService(
         var itemByBodyPart = items.groupBy { it.category.bodyPart }
         val similarItems = mutableListOf<Item>()
         similarItems.add(baseItem)
-        itemByBodyPart = itemByBodyPart.filterKeys { it != baseItem.category.bodyPart }
+        itemByBodyPart.filterKeys { it != baseItem.category.bodyPart }
         return similarItems
     }
 }

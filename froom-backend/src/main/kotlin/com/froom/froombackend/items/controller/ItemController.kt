@@ -39,8 +39,14 @@ class ItemController (val itemService: ItemService) {
     }
 
     @PostMapping("/create")
-    suspend fun createItem(@RequestParam("image") file: MultipartFile, authentication: Authentication): ResponseEntity<ItemDto> {
+    fun createItem(@RequestParam("image") file: MultipartFile, authentication: Authentication): ResponseEntity<ItemDto> {
         return ResponseEntity<ItemDto> (itemService.createItem(file, authentication.toUser()),
+            HttpStatus.CREATED)
+    }
+
+    @PostMapping("/create/without-data-analysis")
+    fun createItemWithoutDataAnalysis(@RequestParam("image") file: MultipartFile, authentication: Authentication): ResponseEntity<ItemDto> {
+        return ResponseEntity<ItemDto>(itemService.createItemWithoutDataAnalysis(file, authentication.toUser()),
             HttpStatus.CREATED)
     }
 
