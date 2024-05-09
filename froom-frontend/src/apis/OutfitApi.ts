@@ -3,7 +3,7 @@ import {Outfit} from '../model/Outfit.ts';
 
 export class OutfitApi {
     static getAllOutfits(): Promise<Outfit[]> {
-        return axios.get(`${import.meta.env.BACKEND_URL}/outfit`, {
+        return axios.get(`${import.meta.env.VITE_BACKEND_URL}/outfit`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -13,7 +13,7 @@ export class OutfitApi {
     }
 
     static getOutfitByUuId(uuid: string): Promise<Outfit> {
-        return axios.get(`${import.meta.env.BACKEND_URL}/outfit/${uuid}`, {
+        return axios.get(`${import.meta.env.VITE_BACKEND_URL}/outfit/${uuid}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -23,7 +23,7 @@ export class OutfitApi {
     }
 
     static createOutfit(name: string, itemUuids: string[]): Promise<Outfit> {
-        return axios.post(`${import.meta.env.BACKEND_URL}/outfit`, {
+        return axios.post(`${import.meta.env.VITE_BACKEND_URL}/outfit`, {
             name: name,
             itemUuids: itemUuids
         }, {
@@ -36,7 +36,7 @@ export class OutfitApi {
     }
 
     static addItemToOutfit(outfitUuid: string, itemUuid: string): Promise<Outfit> {
-        return axios.post(`${import.meta.env.BACKEND_URL}/outfit/${outfitUuid}/item/${itemUuid}`, {
+        return axios.post(`${import.meta.env.VITE_BACKEND_URL}/outfit/${outfitUuid}/item/${itemUuid}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -46,7 +46,7 @@ export class OutfitApi {
     }
 
     static removeItemFromOutfit(outfitUuid: string, itemUuid: string): Promise<Outfit> {
-        return axios.delete(`${import.meta.env.BACKEND_URL}/outfit/${outfitUuid}/item/${itemUuid}`, {
+        return axios.delete(`${import.meta.env.VITE_BACKEND_URL}/outfit/${outfitUuid}/item/${itemUuid}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -56,7 +56,7 @@ export class OutfitApi {
     }
 
     static updateOutfit(name: string, items: string[]): Promise<Outfit> {
-        return axios.put(`${import.meta.env.BACKEND_URL}/outfit`, {
+        return axios.put(`${import.meta.env.VITE_BACKEND_URL}/outfit`, {
             name: name,
             items: items
         }, {
@@ -69,7 +69,7 @@ export class OutfitApi {
     }
 
     static deleteOutfit(uuid: string): Promise<void> {
-        return axios.delete(`${import.meta.env.BACKEND_URL}/outfit/${uuid}`, {
+        return axios.delete(`${import.meta.env.VITE_BACKEND_URL}/outfit/${uuid}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -79,7 +79,7 @@ export class OutfitApi {
     }
 
     static getOuftfitByName(name: string): Promise<Outfit> {
-        return axios.post(`${import.meta.env.BACKEND_URL}/outfit/filter`, {
+        return axios.post(`${import.meta.env.VITE_BACKEND_URL}/outfit/filter`, {
             names: name
         }, {
             headers: {
@@ -91,7 +91,7 @@ export class OutfitApi {
     }
 
     static getRandomOutfit(): Promise<Outfit> {
-        return axios.get(`${import.meta.env.BACKEND_URL}/outfit/random`, {
+        return axios.get(`${import.meta.env.VITE_BACKEND_URL}/outfit/random`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }

@@ -4,7 +4,7 @@ import axios from 'axios';
 export class CategoryApi {
 
     static getCategories(): Promise<Category[]> {
-        return axios.get(`${import.meta.env.BACKEND_URL}/category`, {
+        return axios.get(`${import.meta.env.VITE_BACKEND_URL}/category`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -14,7 +14,7 @@ export class CategoryApi {
     }
 
     static getBodyPartCategories(): Promise<Category[]> {
-        return axios.get(`${import.meta.env.BACKEND_URL}/category/bodypart`, {
+        return axios.get(`${import.meta.env.VITE_BACKEND_URL}/category/bodypart`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }

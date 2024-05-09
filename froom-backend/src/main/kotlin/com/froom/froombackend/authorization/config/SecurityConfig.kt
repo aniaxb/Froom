@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.filter.CorsFilter
 
 
@@ -48,8 +49,17 @@ class SecurityConfig (
             }.xssProtection { xssProtection ->
                 xssProtection.disable()
             }
-        }.cors{ cors ->
-            cors
+        }
+            .cors{ cors ->
+                cors.configurationSource { _ ->
+                    val configuration = CorsConfiguration()
+                    configuration.allowedOrigins = listOf("http://127.0.0.1:5173")
+                    configuration.allowedMethods = listOf("*")
+                    configuration.allowedHeaders = listOf("*")
+                    configuration.allowCredentials = true
+                    configuration.maxAge = 3600L
+                    configuration
+                }
         }.addFilterBefore(ExceptionHandlerFilter(), CorsFilter::class.java)
 
         return http.build()

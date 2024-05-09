@@ -11,10 +11,16 @@ import {
 } from '@material-tailwind/react';
 import {useState} from 'react';
 import {Link, NavLink} from 'react-router-dom';
+import {AuthApi} from '../../apis/AuthApi.ts';
 
 const NavBar = () => {
     const [openNav, setOpenNav] = useState(false);
-    const [isLoggedIn] = useState(false);
+    const isUserLoggedIn: boolean = !!AuthApi.getAuthToken();
+
+    const handleLogOut = () => {
+        AuthApi.removeData();
+        window.location.href = '/';
+    }
 
     const navList = (
         <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -36,15 +42,17 @@ const NavBar = () => {
                     Contact
                 </NavLink>
             </Typography>
-            <Typography
-                as="li"
-                variant="lead"
-                className="p-1 font-semibold"
-            >
-                <NavLink to="/wardrobe" className="hover:text-darkcyan">
-                    Wardrobe
-                </NavLink>
-            </Typography>
+            {isUserLoggedIn ? (
+                <Typography
+                    as="li"
+                    variant="lead"
+                    className="p-1 font-semibold"
+                >
+                    <NavLink to="/wardrobe" className="hover:text-darkcyan">
+                        Wardrobe
+                    </NavLink>
+                </Typography>
+            ): (<div></div>)}
         </ul>
     );
 
@@ -57,7 +65,7 @@ const NavBar = () => {
                     </Link>
                     <div id="navList" className="mr-4 hidden lg:block">{navList}</div>
                     <div className="flex items-center gap-4">
-                        {!isLoggedIn ? (
+                        {!isUserLoggedIn ? (
                             <div className="flex items-center gap-x-2">
                                 <NavLink to="/login" className="sign-button">
                                     <Button
@@ -127,7 +135,7 @@ const NavBar = () => {
                                                     fill="#90A4AE"
                                                 />
                                             </svg>
-                                            <Typography variant="small" className="font-medium">
+                                            <Typography variant="small" className="font-medium" onClick={handleLogOut}>
                                                 Sign Out
                                             </Typography>
                                         </MenuItem>
@@ -177,7 +185,7 @@ const NavBar = () => {
                 <Collapse open={openNav} className="text-black">
                     {navList}
                     <div>
-                        {!isLoggedIn ? (
+                        {!isUserLoggedIn ? (
                                 <div className="flex items-center gap-x-1 my-2">
                                     <NavLink to="/login" className="w-1/2">
                                         <Button fullWidth variant="outlined" size="sm" className="">
@@ -186,7 +194,7 @@ const NavBar = () => {
                                     </NavLink>
                                     <NavLink to="/register" className="w-1/2">
                                         <Button fullWidth variant="gradient" size="sm" className="">
-                                            <span>Sign in</span>
+                                            <span>Sign In</span>
                                         </Button>
                                     </NavLink>
                                 </div>
