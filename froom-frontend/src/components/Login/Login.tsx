@@ -1,11 +1,29 @@
 import {Link, useNavigate} from 'react-router-dom';
-import {Input, Typography} from '@material-tailwind/react';
+import {Button, Input, Typography} from '@material-tailwind/react';
+import {AuthApi} from '../../apis/AuthApi.ts';
+import {useState} from 'react';
 const Login = () => {
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const goBack = () => {
         navigate(-1);
     }
+
+    const handleLoginRequest = () => {
+        AuthApi.loginUser(email, password).then(response => {
+            AuthApi.setAuthToken(response.accessToken);
+            AuthApi.setUser(response.user);
+            AuthApi.setRefreshToken(response.refreshToken);
+            setTimeout(() => {
+                navigate('/wardrobe');
+            }, 1000);
+        }).catch(error => {
+            console.error(error);
+        })
+    }
+
     return (
         <>
             <div className="mt-2 ml-10 absolute flex flex-col justify-center items-center gap-4">
@@ -25,12 +43,27 @@ const Login = () => {
                         <Typography className="text-4xl font-bold">
                             Welcome Back
                         </Typography>
-                        <div className="w-1/2">
-                            <Input type="text" label="E-mail Address"/>
-                        </div>
-                        <div className="w-1/2">
-                            <Input type="password" label="Password"/>
-                        </div>
+                        <form onSubmit={handleLoginRequest} className="w-3/4 xl:w-1/2">
+                            <div className="flex flex-col gap-4">
+                                <div>
+                                    <Input type="text" label="E-mail Address"
+                                           className="w-full"
+                                           value={email}
+                                           onChange={e => setEmail(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <Input type="password" label="Password"
+                                           className="w-full"
+                                           value={password}
+                                           onChange={e => setPassword(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <Button onClick={handleLoginRequest} className="w-full bg-tearose text-blue-gray-900">Log in</Button>
+                                </div>
+                            </div>
+                        </form>
                         <div>
                             <Typography
                                 className="text-gray-500 mt-2 flex items-center gap-1 font-normal text-base"

@@ -10,7 +10,7 @@ const BodyPartMenu = () => {
 
     return (
         <>
-            <div id='bodypart' className='flex flex-col justify-between h-full'>
+            <div id='bodypart' className='flex flex-col justify-between h-full gap-2'>
                 <div
                     id='categoryIcon'
                     onClick={() => handleCategoryClick('upper')}

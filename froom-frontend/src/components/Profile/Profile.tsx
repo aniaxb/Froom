@@ -1,7 +1,70 @@
 import NavBar from '../NavBar/NavBar.tsx';
-import {Button, Card, CardBody, Input, Typography} from '@material-tailwind/react';
+import {Button, Card, CardBody, Dialog, Input, Typography} from '@material-tailwind/react';
+import {useEffect, useState} from 'react';
+import {UserApi} from '../../apis/UserApi.ts';
 
 const Profile = () => {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [newPasswordConfirmation, setNewPasswordConfirmation] = useState('');
+
+    const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);
+    const [isDeleteUserDialogOpen, setIsDeleteUserDialogOpen] = useState(false);
+
+    const handleOpenPassword = () => setIsChangePasswordDialogOpen(!isChangePasswordDialogOpen);
+    const handleOpenDelete = () => setIsDeleteUserDialogOpen(!isDeleteUserDialogOpen);
+
+    const handleCancel = () => {
+        setOldPassword('');
+        setNewPassword('');
+        setNewPasswordConfirmation('');
+        setIsChangePasswordDialogOpen(false);
+    }
+
+    const fetchUserData = () => {
+        UserApi.getUser().then(response => {
+            setFirstName(response.firstName);
+            setLastName(response.lastName);
+            setUsername(response.username);
+            setEmail(response.email)
+        }).catch(error => {
+            console.error(error);
+        })
+    }
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    const handleUpdateUserRequest = () => {
+        UserApi.updateUser(firstName, lastName, username, email).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.error(error);
+        });
+    }
+
+    const handleUpdatePasswordRequest = () => {
+        UserApi.updatePassword(oldPassword, newPassword, newPasswordConfirmation).then(response => {
+            console.log(response);
+            fetchUserData();
+        }).catch(error => {
+            console.error(error);
+        });
+    }
+
+    const handleDeleteUserRequest = () => {
+        UserApi.deleteUser().then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.error(error);
+        });
+    }
+
     return (
         <div className="min-h-screen flex flex-col w-screen bg-timberwolf">
             <NavBar/>
@@ -10,32 +73,74 @@ const Profile = () => {
                     <CardBody>
                         <div className="flex flex-col gap-4 justify-center items-center mb-4">
                             <img src="/src/assets/undraw_avatar.svg" alt="Avatar" className="w-28"/>
-                            <Typography variant="lead">
-                                Username
+                            <Typography variant="lead" className="font-bold">
+                                {username}
                             </Typography>
                         </div>
-                        <form>
+                        <form onSubmit={handleUpdateUserRequest}>
                             <div className="flex flex-col gap-4">
-                                <Input type="text" label="First Name" value="Jane"/>
-                                <Input type="text" label="Last Name" value="Smith"/>
-                                <Input type="text" label="Username" value="Bambi"/>
-                                <Input type="email" label="Em-ail" value="bambi@example.com"/>
+                                <Input type="text" label="First Name"
+                                       value={firstName}
+                                       onChange={(e) => setFirstName(e.target.value)}
+                                />
+                                <Input type="text" label="Last Name"
+                                       value={lastName}
+                                       onChange={(e) => setLastName(e.target.value)}
+                                />
+                                <Input type="text" label="Username"
+                                       value={username}
+                                       onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <Input type="email" label="Em-ail"
+                                       value={email}
+                                       onChange={(e) => setEmail(e.target.value)}
+                                />
                                 <div className="flex flex-col lg:flex-row w-full gap-4">
-                                    <Button className="w-full lg:w-1/2 bg-darkcyan">Save changes</Button>
-                                    <Button color="red" className="w-full lg:w-1/2">Cancel changes</Button>
+                                    <Button className="w-full bg-darkcyan" onClick={handleUpdateUserRequest}>Save Changes</Button>
                                 </div>
                             </div>
                         </form>
                         <form>
                             <Typography variant="small" className="font-bold my-4">Password</Typography>
                             <div className="flex flex-col lg:flex-row gap-4 w-full">
-                                <Input className="w-full" type="password" disabled label="Password" value="pass123"/>
-                                <Button className="w-full">Change password</Button>
+                                <Input className="w-full" type="password" disabled label="Password" value="********"/>
+                                <Button className="w-full" onClick={handleOpenPassword}>Change Password Dialog</Button>
                             </div>
+                            <Dialog open={isChangePasswordDialogOpen} handler={handleOpenPassword} className="p-10">
+                                <form onSubmit={handleUpdatePasswordRequest}>
+                                    <div className="flex flex-col gap-4">
+                                        <Input type="password" label="Current Password"
+                                               value={oldPassword}
+                                               onChange={(e) => setOldPassword(e.target.value)}
+                                        />
+                                        <Input type="password" label="New Password"
+                                               value={newPassword}
+                                               onChange={(e) => setNewPassword(e.target.value)}
+                                        />
+                                        <Input type="password" label="Confirm New Password"
+                                               value={newPasswordConfirmation}
+                                               onChange={(e) => setNewPasswordConfirmation(e.target.value)}
+                                        />
+                                        <div className="flex flex-col lg:flex-row w-full gap-4">
+                                            <Button className="w-full bg-darkcyan" onClick={handleUpdatePasswordRequest}>Change Password</Button>
+                                            <Button color={'red'} className="w-full" onClick={handleCancel}>Cancel</Button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </Dialog>
                         </form>
                         <div className="flex flex-col mt-4 gap-4">
                             <Typography variant="h3" color="blue-gray" className="font-bold">Other actions</Typography>
-                            <Button color="red" className="w-full">Delete user</Button>
+                            <Button color="red" className="w-full" onClick={handleOpenDelete}>Delete User</Button>
+                            <Dialog open={isDeleteUserDialogOpen} handler={handleOpenDelete} className="p-10">
+                                <div className="flex flex-col gap-8">
+                                    <Typography variant="h3" className="text-blue-gray-900 text-center font-bold">Are you sure?</Typography>
+                                    <div className="flex flex-col lg:flex-row w-full gap-4">
+                                        <Button className="w-full bg-darkcyan" onClick={handleDeleteUserRequest}>Yes</Button>
+                                        <Button color={'red'} className="w-full" onClick={handleOpenDelete}>No</Button>
+                                    </div>
+                                </div>
+                            </Dialog>
                         </div>
                     </CardBody>
                 </Card>

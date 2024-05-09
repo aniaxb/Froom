@@ -12,7 +12,7 @@ function App() {
   return (
       <>
           <Routes>
-              <Route path={'/'} element={<Landing/>}></Route>
+              <Route path={'*'} element={<Landing/>}></Route>
               <Route path={'/about'} element={<About />}></Route>
               <Route path={'/contact'} element={<Contact />}></Route>
               <Route path={'/wardrobe'} element={<Wardrobe />}></Route>

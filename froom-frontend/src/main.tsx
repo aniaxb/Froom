@@ -16,7 +16,7 @@ import Profile from './components/Profile/Profile.tsx';
 
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: '*',
         element: <App />,
     },
     {

@@ -4,7 +4,7 @@ import {User} from '../model/User.ts';
 export class AuthApi {
 
     static loginUser(email: string, password: string) {
-        return axios.post(`${import.meta.env.BACKEND_URL}/auth/login`, {
+        return axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
             email: email,
             password: password
         }).then(response => {
@@ -13,7 +13,7 @@ export class AuthApi {
     }
 
     static refresh(refreshToken: string) {
-        return axios.post(`${import.meta.env.BACKEND_URL}/auth/refresh`, {
+        return axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/refresh`, {
             refreshToken: refreshToken
         }).then(response => {
             return response.data
