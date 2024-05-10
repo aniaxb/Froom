@@ -111,7 +111,7 @@ class ItemService (
             throw Exception("Cannot update item: $uuid, user: ${user.uuid} does not own the item.")
         }
         item.category = command.category
-        item.bodyPart = command.bodypart
+        item.bodyPart = command.bodyPart
         item.color = command.color
         logger.info("Item updated: $uuid")
         return itemRepository.save(item).toDto()
