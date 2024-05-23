@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar.tsx';
-import {Button, Card, CardBody, CardFooter, Input, Textarea, Tooltip, Typography} from '@material-tailwind/react';
+import {Button, Card, CardBody, Tooltip, Typography} from '@material-tailwind/react';
 
 const Contact = () => {
     return (
@@ -15,7 +15,7 @@ const Contact = () => {
                             </Typography>
                             <img src="/src/assets/logos/froom_logo.png" alt="Froom logo" className="w-28 h-28"/>
                         </div>
-                        <Typography className="xl:w-2/3">
+                        <Typography className="w-full">
                             Ready to bring your ideas to life? Let's connect! Reach out for any inquiries or
                             collaborations, and let's make something great together.
                         </Typography>
@@ -83,7 +83,7 @@ const Contact = () => {
                                 </Tooltip>
                             </div>
                         </div>
-                        <Link to={'/about'} className='image-link inline-block mt-4 w-full'>
+                        <Link to={'/about'} className='image-link inline-block my-4'>
                             <Button size="sm" variant="outlined"
                                     className="flex items-center justify-center gap-2 w-full md:w-auto">
                                 Learn More About Froom
@@ -104,18 +104,6 @@ const Contact = () => {
                             </Button>
                         </Link>
                     </CardBody>
-                    <div className="flex justify-center mt-2">
-                        <hr className="w-11/12 "/>
-                    </div>
-                    <CardFooter className="px-4 py-2 mb-2 lg:p-6 pt-0">
-                        <div className="flex flex-col gap-4 mt-2">
-                            <Typography variant="h2" color="blue-gray" className="text-2xl lg:text-4xl">Send us a
-                                message</Typography>
-                            <Input label="Topic"/>
-                            <Textarea size="lg" label="Message"/>
-                            <Button>Send Message</Button>
-                        </div>
-                    </CardFooter>
                 </Card>
             </div>
         </div>

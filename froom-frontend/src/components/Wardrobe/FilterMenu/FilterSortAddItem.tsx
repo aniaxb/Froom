@@ -11,13 +11,17 @@ import {
     MenuList,
     Typography
 } from '@material-tailwind/react';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {ItemApi} from '../../../apis/ItemApi.ts';
-import {Category} from "../../../model/enums/Category.ts";
-import {BodyPart} from "../../../model/enums/BodyPart.ts";
+import {Category} from '../../../model/enums/Category.ts';
+import {BodyPart} from '../../../model/enums/BodyPart.ts';
+import OutfitCreator from '../../OutfitGenerator/OutfitCreator.tsx';
 
+interface FilterSortAddItemProps {
+    activeBodyPart: string;
+}
 
-const FilterSortAddItem = () => {
+const FilterSortAddItem: React.FC<FilterSortAddItemProps> = ({ activeBodyPart: activeBodyPart }) => {
     const [openFilterMenu, setOpenFilterMenu] = useState(false);
     const [openSortMenu, setOpenSortMenu] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
@@ -27,6 +31,8 @@ const FilterSortAddItem = () => {
     const [bodyPart, setBodyPart] = useState('');
     const [color, setColor] = useState(['']);
     const [uuid, setUuid] = useState('');
+
+    const [isAddOutfitDialogOpen, setIsAddOutfitDialogOpen] = useState(false);
 
     const handleOpen = () => setOpenDialog(!openDialog);
 
@@ -38,7 +44,7 @@ const FilterSortAddItem = () => {
             name: 'Category',
         },
         {
-            name: 'Size',
+            name: 'Name',
         },
     ];
     const sortItems = [
@@ -78,6 +84,11 @@ const FilterSortAddItem = () => {
     const handleAddItemWithDataAnalysis = (file: File) => {
         ItemApi.createItem(file).then(response => {
             console.log(response);
+            setImage(response.image);
+            setCategory(response.category);
+            setBodyPart(response.bodyPart);
+            setColor(response.color);
+            setUuid(response.uuid)
         }).catch(error => {
             console.error(error);
         });
@@ -95,15 +106,14 @@ const FilterSortAddItem = () => {
             id,
             {
                 category: updatedCategory,
-                bodypart: updatedBodyPart,
+                bodyPart: updatedBodyPart,
                 color: color
             }
         ).then(response => {
             console.log(response);
         }).catch(error => {
             console.error(error);
-        }
-        )
+        });
     }
 
     const handleClear = () => {
@@ -113,22 +123,41 @@ const FilterSortAddItem = () => {
         setImage('');
     }
 
-    return(
+    const handleOpenAddOutfitDialog = () => {
+        setIsAddOutfitDialogOpen(!isAddOutfitDialogOpen)
+    }
+
+    return (
         <>
             <div className='flex flex-col lg:flex-row gap-4 w-full justify-center'>
                 <div className="grow">
+                    {activeBodyPart === 'OUTFITS' ? (
+                        <div className="flex flex-row gap-4 w-full justify-center items-center">
+                            <Input size={'lg'} color={'teal'} label="Search Outfit" className=""
+                                   icon={
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                           <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                       </svg>
+                                   } />
+                            <div>
+                                <Button variant="gradient" className="capitalize lg:w-28 w-full" onClick={handleOpenAddOutfitDialog}>Add outfit</Button>
+                            </div>
+                        </div>
+                        ) : (
                     <Input size={'lg'} color={'teal'} label="Search Item" className="w-1/3"
                            icon={
                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                </svg>
                            } />
+                        )
+                    }
                 </div>
                 <div>
                     <Menu open={openFilterMenu} handler={setOpenFilterMenu} allowHover>
                         <MenuHandler>
                             <Button
-                                className="bg-lightblue flex items-center gap-2 text-sm font-normal capitalize tracking-normal w-full xl:w-auto justify-center"
+                                className="bg-lightblue flex items-center gap-2 font-normal capitalize tracking-normal w-full xl:w-auto justify-center"
                             >
                                 Filter{' '}
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-4">
@@ -155,7 +184,7 @@ const FilterSortAddItem = () => {
                     <Menu open={openSortMenu} handler={setOpenSortMenu} allowHover>
                         <MenuHandler>
                             <Button
-                                className="bg-tearose flex items-center gap-2 text-sm font-normal capitalize tracking-normal w-full xl:w-auto justify-center"
+                                className="bg-tearose flex items-center gap-2 font-normal capitalize tracking-normal w-full xl:w-auto justify-center"
                             >
                                 Sort{' '}
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-4">
@@ -180,7 +209,7 @@ const FilterSortAddItem = () => {
                 </div>
                 <div>
                     <Button onClick={handleOpen}
-                            className="bg-timberwolf flex text-center items-center gap-2 text-sm font-normal capitalize tracking-normal w-full xl:w-auto justify-center">
+                            className="bg-timberwolf flex text-center items-center gap-2 font-normal capitalize tracking-normal w-full xl:w-auto justify-center">
                         Add Item{' '}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-4">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -222,11 +251,11 @@ const FilterSortAddItem = () => {
                             </div>
                             <div className="flex flex-col justify-center gap-8 w-3/4 lg:w-1/3">
                                 <Input label='Category' value={category}
-                                       onChange={e => setCategory(e.target.value)}></Input>
+                                       onChange={e => setCategory(e.target.value)}/>
                                 <Input label='BodyPart' value={bodyPart}
-                                       onChange={e => setBodyPart(e.target.value)}></Input>
+                                       onChange={e => setBodyPart(e.target.value)}/>
                                 <Input label='Color' value={color.join(',')}
-                                       onChange={handleColorChange}></Input>
+                                       onChange={handleColorChange}/>
                                 <Button onClick={handleClear}>Clear Inputs</Button>
                             </div>
                         </div>
@@ -239,12 +268,16 @@ const FilterSortAddItem = () => {
                                </Button>
                            </div>
                             <div className="w-1/3">
-                                <Button onClick={handleOpen} className='mr-1 bg-red-500 w-full'>
+                                <Button onClick={ () => {
+                                    handleOpen();
+                                    window.location.reload();
+                                }} className='mr-1 bg-red-500 w-full'>
                                     Close
                                 </Button>
                             </div>
                     </DialogFooter>
                 </Dialog>
+               <OutfitCreator isAddOutfitDialogOpen={isAddOutfitDialogOpen} handleOpenAddOutfitDialog={handleOpenAddOutfitDialog} />
             </div>
         </>
     );
