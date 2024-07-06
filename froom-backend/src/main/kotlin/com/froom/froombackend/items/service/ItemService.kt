@@ -131,22 +131,23 @@ class ItemService (
 
     @Transactional
     fun getItemsByFilter(category: Category?, bodyPart: BodyPart?, color: String?, user: User): List<ItemDto> {
-        val filteredItems = mutableListOf<Item>()
+        var filteredItems = itemRepository.findByUserUuid(user.uuid)
 
-        if (category != null) {
-            filteredItems.addAll(itemRepository.findByCategoryAndUserUuid(category, user.uuid))
+        category?.let {
+            filteredItems = filteredItems.filter { it.category == category }
         }
 
-        if (bodyPart != null) {
-            filteredItems.addAll(itemRepository.findByBodyPartAndUserUuid(bodyPart, user.uuid))
+        bodyPart?.let {
+            filteredItems = filteredItems.filter { it.bodyPart == bodyPart }
         }
 
-        if (color != null) {
-            filteredItems.addAll(itemRepository.findByColorAndUserUuid(color, user.uuid))
+        color?.let {
+            filteredItems = filteredItems.filter { it.color.contains(color) }
         }
 
         return filteredItems.map { it.toDto() }
     }
+
 
     fun getColor(file: MultipartFile): Pair<List<String>, ByteArray> {
         return colorExtraction.getColor(file)

@@ -14,7 +14,7 @@ enum class Category(name: String, val bodyPart: BodyPart, val index: Int) {
     SNEAKERS("Sneakers", BodyPart.SHOES, 7),
     BAG("Bag", BodyPart.ACCESSORY, 8),
     ANKLE_BOOTS("Ankle Boots", BodyPart.SHOES, 9),
-    UNKNOWN("Unknown", BodyPart.UNKNOWN, -1);
+    UNKNOWN("Unknown", BodyPart.ACCESSORY, -1);
 
     @JsonValue
     fun toJson(): String {

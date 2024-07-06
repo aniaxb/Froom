@@ -3,6 +3,7 @@ package com.froom.froombackend.items.controller
 import com.froom.froombackend.authorization.util.toUser
 import com.froom.froombackend.items.model.command.CreateOutfitCommand
 import com.froom.froombackend.items.model.command.UpdateOutfitCommand
+import com.froom.froombackend.items.model.dto.ItemDto
 import com.froom.froombackend.items.model.dto.OutfitDto
 import com.froom.froombackend.items.service.OutfitService
 import jakarta.validation.Valid
@@ -76,6 +77,15 @@ class OutfitController(val outfitService: OutfitService) {
         return ResponseEntity<HttpStatus>(HttpStatus.ACCEPTED)
     }
 
+    @PostMapping("/{outfitUuid}/duplicate")
+    fun duplicateOutfit(
+        @PathVariable outfitUuid: UUID,
+        authentication: Authentication
+    ): ResponseEntity<OutfitDto> {
+        return ResponseEntity<OutfitDto>(outfitService.duplicateOutfit(outfitUuid, authentication.toUser()),
+            HttpStatus.CREATED)
+    }
+
     @GetMapping("/filter")
     fun getOutfitByName(
         @RequestParam(required = true) name: String,
@@ -91,8 +101,16 @@ class OutfitController(val outfitService: OutfitService) {
             HttpStatus.OK)
     }
 
+    @GetMapping("")
+    fun getOutfitItems(
+        @RequestParam(required = true) outfitUuid: UUID
+    ): ResponseEntity<List<ItemDto>> {
+        return ResponseEntity<List<ItemDto>>(outfitService.getOutfitItems(outfitUuid),
+            HttpStatus.OK)
+    }
+
     @PostMapping("/generate")
     fun generateOutfit(authentication: Authentication) {
-        //TODO: implement logic for generating outfit
+//        Future - smart outfit generation
     }
 }
