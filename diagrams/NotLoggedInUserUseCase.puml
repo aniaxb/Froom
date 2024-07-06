@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+
+actor "Niezalogowany użytkownik" as User
+
+rectangle "Froom" {
+  User -- (Przeglądanie strony głównej)
+  User -- (Przeglądanie "o nas")
+  User -- (Przeglądanie kontaktu)
+  User -- (Rejestracja konta)
+  User -- (Logowanie do serwisu)
+}
+
+@enduml

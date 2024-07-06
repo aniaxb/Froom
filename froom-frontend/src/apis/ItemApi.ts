@@ -61,10 +61,10 @@ export class ItemApi {
         return response.data;
     }
 
-    static updateItem(uuid: string, data: { category: Category; bodypart: BodyPart; color: string[]; }): Promise<Item> {
+    static updateItem(uuid: string, data: { category: Category; bodyPart: BodyPart; color: string[]; }): Promise<Item> {
         return axios.put(`${import.meta.env.VITE_BACKEND_URL}/item/${uuid}`, {
             category: data.category.toString(),
-            bodypart: data.bodypart.toString(),
+            bodyPart: data.bodyPart.toString(),
             color: data.color,
         }, {
             headers: {

@@ -1,0 +1,32 @@
+@startuml
+
+left to right direction
+
+component Frontend {
+    class Landing
+    class About
+    class Contact
+    class Login
+    class Register
+    class Wardrobe
+    class Outfit
+    class NavBar
+    class Profile
+
+    component APIs {
+    class AuthApi
+    class CategoryApi
+    class ItemApi
+    class OutfitApi
+    class UserApi
+    }
+
+    Login --(0-- AuthApi
+    Register --(0-- AuthApi
+    Wardrobe --(0-- ItemApi
+    Outfit --(0-- ItemApi
+    NavBar --(0-- UserApi
+    Profile --(0-- UserApi
+}
+
+@enduml
