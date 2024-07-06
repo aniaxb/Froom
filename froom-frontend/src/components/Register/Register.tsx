@@ -2,6 +2,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {Input, Typography} from '@material-tailwind/react';
 import {useState} from 'react';
 import {UserApi} from '../../apis/UserApi.ts';
+import { toast } from 'react-hot-toast';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -19,9 +20,10 @@ const Register = () => {
        UserApi.registerUser(firstName, lastName, username, email, password).then(response => {
             console.log(response);
             navigate('/');
+            toast.success('User registered');
         }).catch(error => {
             console.error(error);
-
+            toast.error('Error registering User');
        });
     }
     return (
@@ -49,35 +51,33 @@ const Register = () => {
                             Welcome To
                             <a className="text-indigo-200">Froom</a>
                         </Typography>
-                        <form onSubmit={handleRegisterRequest} className="w-full xl:w-1/2">
+                        <form onSubmit={handleRegisterRequest} className="w-3/4 xl:w-1/2">
                             <div className="flex flex-col gap-8 justify-center items-center">
-                                <div className="flex flex-col xl:flex-row gap-8 w-3/4 lg:w-1/2">
-                                    <div>
-                                        <Input type="text" label="First Name"
-                                               value={firstName}
-                                               onChange={e => setFirstName(e.target.value)}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Input type="text" label="Last Name"
-                                               value={lastName}
-                                               onChange={e => setLastName(e.target.value)}
-                                        />
-                                    </div>
+                                <div className="w-3/4">
+                                    <Input type="text" label="First Name"
+                                           value={firstName}
+                                           onChange={e => setFirstName(e.target.value)}
+                                    />
                                 </div>
-                                <div className="w-3/4 lg:w-1/2">
+                                <div className="w-3/4">
+                                    <Input type="text" label="Last Name"
+                                           value={lastName}
+                                           onChange={e => setLastName(e.target.value)}
+                                    />
+                                </div>
+                                <div className="w-3/4">
                                     <Input type="text" label="Username"
                                            value={username}
                                            onChange={e => setUsername(e.target.value)}
                                     />
                                 </div>
-                                <div className="w-3/4 lg:w-1/2">
+                                <div className="w-3/4">
                                     <Input type="text" label="E-mail Address"
                                            value={email}
                                            onChange={e => setEmail(e.target.value)}
                                     />
                                 </div>
-                                <div className="w-3/4 lg:w-1/2">
+                                <div className="w-3/4">
                                     <Input type="password" label="Password"
                                            value={password}
                                            onChange={e => setPassword(e.target.value)}

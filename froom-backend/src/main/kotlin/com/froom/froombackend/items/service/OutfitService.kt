@@ -2,6 +2,7 @@ package com.froom.froombackend.items.service
 
 import com.froom.froombackend.items.model.command.CreateOutfitCommand
 import com.froom.froombackend.items.model.command.UpdateOutfitCommand
+import com.froom.froombackend.items.model.domain.BodyPart
 import com.froom.froombackend.items.model.domain.Item
 import com.froom.froombackend.items.model.domain.Outfit
 import com.froom.froombackend.items.model.dto.ItemDto
@@ -127,31 +128,58 @@ class OutfitService(
     }
 
     @Transactional
-    fun generateRandomOutfit(user: User): OutfitDto {
-        val items = itemRepository.findByUserUuid(user.uuid).map { it.toDto() }
-        //Create list of random items each of different body part
-        val randomItems = mutableListOf<ItemDto>()
-        val bodyParts = mutableListOf<String>()
-        while (randomItems.size < 5) {
-            val randomItem = items.random()
-            if (!bodyParts.contains(randomItem.category.bodyPart.toString())) {
-                randomItems.add(randomItem)
-                bodyParts.add(randomItem.category.bodyPart.toString())
-            }
+    fun duplicateOutfit(outfitUuid: UUID, user: User): OutfitDto {
+        val outfit = outfitRepository.findOutfitByUuid(outfitUuid) ?: throw Exception(NOT_FOUND)
+        if (outfit.user.uuid != user.uuid) {
+            throw Exception("Cannot duplicate outfit: $outfitUuid, user: ${user.uuid} does not own the outfit.")
         }
-        val outfit = Outfit(
+        val duplicateOutfit = Outfit(
             id = null,
-            name = "Random outfit",
+            name = "Copy of ${outfit.name}",
             user = user,
-            items = randomItems.map { itemRepository.findByUuid(it.uuid)!! }.toMutableList()
+            items = outfit.items.map { it }.toMutableList()
         )
-        logger.info("Random outfit created: ${outfit.uuid}")
-        return outfitRepository.save(outfit).toDto()
-
+        logger.info("Outfit duplicated: $outfitUuid")
+        return outfitRepository.save(duplicateOutfit).toDto()
     }
 
+    @Transactional
+    fun generateRandomOutfit(user: User): OutfitDto {
+        val items = itemRepository.findByUserUuid(user.uuid).map { it.toDto() }
+        val bodyParts = BodyPart.entries.toTypedArray()
+
+        // Create a map of items by body part
+        val itemsByBodyPart = bodyParts.associateWith { bodyPart ->
+            items.filter { it.category.bodyPart == bodyPart }
+        }
+
+        // Check if there are enough items to create an outfit
+        val missingBodyParts = itemsByBodyPart.filter { it.value.isEmpty() }.keys
+        when {
+            missingBodyParts.isNotEmpty() -> {
+                throw IllegalStateException("Not enough items to generate a random outfit for body parts: $missingBodyParts")
+            }
+            else -> {
+                val randomItems = itemsByBodyPart.map { (_, items) ->
+                    items.random()
+                }
+
+                val outfit = Outfit(
+                    id = null,
+                    name = "Random outfit",
+                    user = user,
+                    items = randomItems.map { itemRepository.findByUuid(it.uuid)!! }.toMutableList()
+                )
+                logger.info("Random outfit created: ${outfit.uuid}")
+                return outfitRepository.save(outfit).toDto()
+            }
+        }
+    }
+
+
+
     fun getSimilarItemsToBaseItemByColor(baseItem: Item, items: List<Item>): List<Item> {
-        var itemByBodyPart = items.groupBy { it.category.bodyPart }
+        val itemByBodyPart = items.groupBy { it.category.bodyPart }
         val similarItems = mutableListOf<Item>()
         similarItems.add(baseItem)
         itemByBodyPart.filterKeys { it != baseItem.category.bodyPart }

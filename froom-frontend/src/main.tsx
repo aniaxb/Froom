@@ -13,6 +13,8 @@ import Contact from './components/Contact/Contact.tsx';
 import Login from './components/Login/Login.tsx';
 import Register from './components/Register/Register.tsx';
 import Profile from './components/Profile/Profile.tsx';
+import {Toaster} from 'react-hot-toast';
+import AuthWrapper from './authWrapper.tsx';
 
 const router = createBrowserRouter([
     {
@@ -47,8 +49,11 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+      <Toaster position='top-center'/>
       <ThemeProvider>
-          <RouterProvider router={router} />
+          <AuthWrapper>
+              <RouterProvider router={router} />
+          </AuthWrapper>
       </ThemeProvider>
   </React.StrictMode>,
 )

@@ -55,10 +55,10 @@ export class OutfitApi {
         });
     }
 
-    static updateOutfit(name: string, items: string[]): Promise<Outfit> {
-        return axios.put(`${import.meta.env.VITE_BACKEND_URL}/outfit`, {
-            name: name,
-            items: items
+    static updateOutfit(uuid: string, data: { name: string; items: string[]; }):  Promise<Outfit> {
+        return axios.put(`${import.meta.env.VITE_BACKEND_URL}/outfit/${uuid}`, {
+            name: data.name,
+            items: data.items
         }, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -70,6 +70,17 @@ export class OutfitApi {
 
     static deleteOutfit(uuid: string): Promise<void> {
         return axios.delete(`${import.meta.env.VITE_BACKEND_URL}/outfit/${uuid}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(response => {
+            return response.data;
+        });
+    }
+
+    static duplicateOutfit(uuid: string): Promise<Outfit> {
+        return axios.post(`${import.meta.env.VITE_BACKEND_URL}/outfit/${uuid}/duplicate`, {},
+            {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }

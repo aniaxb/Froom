@@ -2,6 +2,7 @@ import NavBar from '../NavBar/NavBar.tsx';
 import {Button, Card, CardBody, Dialog, Input, Typography} from '@material-tailwind/react';
 import {useEffect, useState} from 'react';
 import {UserApi} from '../../apis/UserApi.ts';
+import { toast } from 'react-hot-toast';
 
 const Profile = () => {
     const [firstName, setFirstName] = useState('');
@@ -33,6 +34,7 @@ const Profile = () => {
             setEmail(response.email)
         }).catch(error => {
             console.error(error);
+            toast.error('Error fetching User data');
         })
     }
 
@@ -43,30 +45,36 @@ const Profile = () => {
     const handleUpdateUserRequest = () => {
         UserApi.updateUser(firstName, lastName, username, email).then(response => {
             console.log(response);
+            toast.success('User data updated');
         }).catch(error => {
             console.error(error);
+            toast.error('Error updating User data');
         });
     }
 
     const handleUpdatePasswordRequest = () => {
         UserApi.updatePassword(oldPassword, newPassword, newPasswordConfirmation).then(response => {
             console.log(response);
+            toast.success('Password updated');
             fetchUserData();
         }).catch(error => {
             console.error(error);
+            toast.error('Error updating password');
         });
     }
 
     const handleDeleteUserRequest = () => {
         UserApi.deleteUser().then(response => {
             console.log(response);
+            toast.success('User deleted');
         }).catch(error => {
             console.error(error);
+            toast.error('Error deleting User');
         });
     }
 
     return (
-        <div className="min-h-screen flex flex-col w-screen bg-timberwolf">
+        <div className="min-h-screen flex flex-col w-screen bg-gray-200">
             <NavBar/>
             <div className="flex flex-grow justify-center items-center">
                 <Card className="w-3/4 xl:w-1/2 shadow-2xl xl:p-4">
@@ -101,7 +109,7 @@ const Profile = () => {
                             </div>
                         </form>
                         <form>
-                            <Typography variant="small" className="font-bold my-4">Password</Typography>
+                            <Typography className="font-bold my-4">Password</Typography>
                             <div className="flex flex-col lg:flex-row gap-4 w-full">
                                 <Input className="w-full" type="password" disabled label="Password" value="********"/>
                                 <Button className="w-full" onClick={handleOpenPassword}>Change Password Dialog</Button>
@@ -130,7 +138,7 @@ const Profile = () => {
                             </Dialog>
                         </form>
                         <div className="flex flex-col mt-4 gap-4">
-                            <Typography variant="h3" color="blue-gray" className="font-bold">Other actions</Typography>
+                            <Typography className="font-bold">Other actions</Typography>
                             <Button color="red" className="w-full" onClick={handleOpenDelete}>Delete User</Button>
                             <Dialog open={isDeleteUserDialogOpen} handler={handleOpenDelete} className="p-10">
                                 <div className="flex flex-col gap-8">
