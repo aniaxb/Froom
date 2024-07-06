@@ -26,7 +26,7 @@ ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5000
 
 # Run the training script
-RUN python run.py
+#RUN python run.py
 
 # Expose the port on which the app will run
 EXPOSE 5000
