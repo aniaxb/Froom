@@ -2,6 +2,8 @@ import {Link, useNavigate} from 'react-router-dom';
 import {Button, Input, Typography} from '@material-tailwind/react';
 import {AuthApi} from '../../apis/AuthApi.ts';
 import {useState} from 'react';
+import {toast} from 'react-hot-toast';
+
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -19,8 +21,10 @@ const Login = () => {
             setTimeout(() => {
                 navigate('/wardrobe');
             }, 1000);
+            toast.success('User logged in');
         }).catch(error => {
             console.error(error);
+            toast.error('Error logging in');
         })
     }
 
@@ -44,22 +48,20 @@ const Login = () => {
                             Welcome Back
                         </Typography>
                         <form onSubmit={handleLoginRequest} className="w-3/4 xl:w-1/2">
-                            <div className="flex flex-col gap-4">
-                                <div>
+                            <div className="flex flex-col gap-4 justify-center items-center">
+                                <div className="w-3/4">
                                     <Input type="text" label="E-mail Address"
-                                           className="w-full"
                                            value={email}
                                            onChange={e => setEmail(e.target.value)}
                                     />
                                 </div>
-                                <div>
+                                <div className="w-3/4">
                                     <Input type="password" label="Password"
-                                           className="w-full"
                                            value={password}
                                            onChange={e => setPassword(e.target.value)}
                                     />
                                 </div>
-                                <div>
+                                <div className="w-3/4">
                                     <Button onClick={handleLoginRequest} className="w-full bg-tearose text-blue-gray-900">Log in</Button>
                                 </div>
                             </div>

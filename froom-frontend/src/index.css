@@ -90,7 +90,7 @@ button {
 }
 
 button:hover {
-  border-color: #F7CBCA;
+  /*border-color: #F7CBCA;*/
 }
 
 /*button:focus,*/
