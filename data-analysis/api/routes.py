@@ -5,9 +5,9 @@ import os
 
 from flask import Blueprint, jsonify, request
 
-from background.background_removal import remove_background
-from category.category_detection import detect_category
-from color.color_detection import detect_colors
+from background.background_removal import BackgroundRemoval
+from category.category_detection import CategoryDetection
+from color.color_extraction import ColorExtraction
 
 api = Blueprint('api', __name__)
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ async def background_and_color():
     image = request.files['image']
 
     # Create remove background and predict category tasks
-    remove_background_task = asyncio.create_task(remove_background(image))
+    remove_background_task = asyncio.create_task(BackgroundRemoval.remove_background(image))
 
     processed_image_info = await remove_background_task
 
@@ -29,7 +29,7 @@ async def background_and_color():
         return jsonify(processed_image_info), 500
 
     # Call detect_colors function for image with removed background
-    colors = detect_colors(processed_image_info['output_image'])
+    colors = ColorExtraction.detect_colors(processed_image_info['output_image'])
 
     # Read the processed image data
     with open(processed_image_info['output_image'], 'rb') as f:
@@ -55,7 +55,7 @@ def predict():
 
     image_file = request.files['image']
 
-    predicted_label, confidence = detect_category(image_file)
+    predicted_label, confidence = CategoryDetection.detect_category(image_file)
 
     # Check if prediction is successful
     if predicted_label is not None and confidence is not None:
