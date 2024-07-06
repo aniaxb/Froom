@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+
+actor "Zalogowany użytkownik" as User
+
+rectangle "Froom" {
+  User -- (Przeglądanie strony głównej)
+  User -- (Przeglądanie "o nas")
+  User -- (Przeglądanie kontaktu)
+  User -- (Przeglądanie szafy)
+  User -- (Zarządzanie ubraniami)
+  (Zarządzanie ubraniami) <.. (Dodawanie ubrań) : <<extends>>
+  (Zarządzanie ubraniami) <.. (Edycja ubrań) : <<extends>>
+  (Zarządzanie ubraniami) <.. (Usuwanie ubrań) : <<extends>>
+  User -- (Wylogowanie)
+  User -- (Przeglądanie profilu)
+  User -- (Edycja informacji o użytkowniku)
+  (Edycja informacji o użytkowniku) <.. (Zmiana hasła) : <<extends>>
+  (Edycja informacji o użytkowniku) <.. (Zmiana e-mail) : <<extends>>
+  (Edycja informacji o użytkowniku) <.. (Zmiana imienia i nazwiska) : <<extends>>
+}
+
+@enduml

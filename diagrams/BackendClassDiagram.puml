@@ -1,0 +1,44 @@
+@startuml
+
+component Backend {
+
+    class User {
+        - uuid: int
+        - username: String
+        - email : String
+        - password : String
+    }
+
+    class Item {
+        - uuid: int
+        - color : String[]
+        - category: Category
+        - bodyPart: BodyPart
+        - image: ByteArray
+        - imageFormat: String
+    }
+
+    class Category {
+        - uuid: int
+        - name: String
+    }
+
+    class BodyPart {
+        - uuid: int
+        - name: String
+    }
+
+    class Outfit {
+        - uuid: int
+        - items: Item[]
+        - user: User
+    }
+
+    User "1" -- "0..*" Outfit
+    Outfit "1" -- "0..*" Item
+    User "1" -- "0..*" Item
+    Item "1" -- "0..1" Category
+    Item "1" -- "0..1" BodyPart
+}
+
+@enduml

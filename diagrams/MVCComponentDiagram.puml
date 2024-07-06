@@ -1,0 +1,10 @@
+@startuml
+
+component "Controller" as controller
+component "Service" as service
+component "Repository" as repository
+
+controller -down-> service
+service -down-> repository
+
+@enduml

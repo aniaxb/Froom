@@ -1,0 +1,18 @@
+@startuml
+
+component "Data Analysis" {
+    class BackgroundRemoval
+    class ColorExtraction
+    class CategoryDetection
+
+    component API {
+    class routes as "API"
+    }
+
+    BackgroundRemoval --> routes
+    ColorExtraction --> routes
+    CategoryDetection --> routes
+
+}
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+
+component "Frontend"
+
+component "Backend"
+
+component "Data Analysis"
+
+component "Database"
+
+"Frontend" --> "Backend" : HTTP Request
+"Backend" --> "Data Analysis" : HTTP Request
+"Backend" --> "Database" : SQL Query
+
+@enduml

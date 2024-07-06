@@ -1,0 +1,36 @@
+@startuml
+
+title "Successful registration of a new user"
+
+participant "User" as User
+participant "Browser" as Browser
+participant "Server" as Server
+
+User -> Browser: Open the registration page
+Browser -> Server: Send a request to open the registration page
+activate Server
+Server -> Browser: Send the registration page
+deactivate Server
+Browser -> User: Show the registration page
+User -> Browser: Fill in the registration form and send it
+activate Server
+Browser -> Server: Send the registration form
+Server -> Browser: Check the form
+alt correct
+    Server -> Browser: Send the success message
+    Browser -> User: Show the success message
+else incorrect
+    Server -> Browser: Send the error message
+    Browser -> User: Show the error message
+end
+'Server -> Browser: Registration successful
+'Browser -> User: Show the success message
+deactivate Server
+User -> Browser: Redirect to wardrobe page
+Browser -> Server: Send a request to redirect to wardrobe page
+activate Server
+Server -> Browser: Redirect to wardrobe page
+Browser -> User: Show the wardrobe page
+deactivate Server
+
+@enduml
