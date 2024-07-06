@@ -60,29 +60,31 @@ const OutfitItems: React.FC<OutfitItemsProps> = ({onSelectItem}) => {
             </TabsHeader>
             <TabsBody>
                 {data.map(({ value}) => (
-                    <TabPanel key={value} value={value}>
-                        <div>
-                            {/*Clothes*/}
+                    <TabPanel key={value} value={value} className='pr-0'>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 justify-between">
                             {outfitItems.map((item) => {
                                 if (item.bodyPart === BodyPart[value.toUpperCase() as keyof typeof BodyPart]) {
                                     return (
-                                        <div key={item.uuid} className="relative group ">
-                                            <img
-                                                src={`data:image/jpeg;base64,${item.image}`}
-                                                alt="clothing item"
-                                                className="w-40  rounded-lg shadow-lg"
-                                            />
-                                            {onSelectItem && (
-                                                <div
-                                                    className="w-40 absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50">
-                                                    <button
-                                                        onClick={() => onSelectItem(item)}
-                                                        className="bg-teal-500 text-white py-2 px-4 rounded-lg"
+                                        <div key={item.uuid} className="relative group w-40 h-auto">
+                                            <div className="relative w-full">
+                                                <img
+                                                    src={`data:image/jpeg;base64,${item.image}`}
+                                                    alt="clothing item"
+                                                    className="w-full h-auto rounded-lg shadow-lg"
+                                                />
+                                                {onSelectItem && (
+                                                    <div
+                                                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50 rounded-lg"
                                                     >
-                                                        Select
-                                                    </button>
-                                                </div>
-                                            )}
+                                                        <button
+                                                            onClick={() => onSelectItem(item)}
+                                                            className="bg-teal-500 text-white py-2 px-4 rounded-lg"
+                                                        >
+                                                            Select
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     );
                                 }

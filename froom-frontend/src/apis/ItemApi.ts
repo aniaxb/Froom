@@ -99,10 +99,10 @@ export class ItemApi {
         });
     }
 
-    static getItemsByFilter(category?: Category, bodyPart?: BodyPart, color?: string[]): Promise<Item[]> {
+    static getItemsByFilter(category?: string | undefined, bodyPart?: string, color?: string): Promise<Item[]> {
         return axios.get(`${import.meta.env.VITE_BACKEND_URL}/item/filter`, {
             params: {
-                category: category,
+                category: category?.toUpperCase(),
                 bodyPart: bodyPart,
                 color: color
             },

@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 import { Item } from '../../model/Item';
 import {Button, Dialog, DialogBody, DialogFooter, DialogHeader, Input, Typography} from '@material-tailwind/react';
 import {OutfitApi} from '../../apis/OutfitApi.ts';
 import OutfitItems from './OutfitItems.tsx';
+import {toast} from 'react-hot-toast';
 
-interface OutfitCreatorProps {
-    isAddOutfitDialogOpen: boolean;
-    handleOpenAddOutfitDialog: () => void;
+interface EditOutfitProps {
+    isEditOutfitDialogOpen: boolean;
+    handleOpenEditOutfitDialog: () => void;
+    uuid: string;
+    onOutfitUpdated: () => void;
 }
 
-const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isAddOutfitDialogOpen, handleOpenAddOutfitDialog: handleOpenAddOutfitDialog}) => {
+const EditOutfit: React.FC<EditOutfitProps> = ({
+                                                   isEditOutfitDialogOpen: isEditOutfitDialogOpen,
+                                                   handleOpenEditOutfitDialog: handleOpenEditOutfitDialog,
+                                                   uuid: outfitUuid,
+                                                   onOutfitUpdated
+}) => {
     const [selectedItems, setSelectedItems] = useState<{
         top?: Item;
         bottom?: Item;
@@ -19,6 +27,10 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
     }>({});
     const [outfitName, setOutfitName] = useState('');
     const [outfitItems, setOutfitItems] = useState<string[]>([]);
+
+    useEffect(() => {
+        fetchOutfitData();
+    }, []);
 
     const handleItemSelect = (item: Item) => {
         setSelectedItems((prevItems) => ({
@@ -31,32 +43,72 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
         );
     };
 
-    const handleAddOutfitRequest = () => {
-        OutfitApi.createOutfit(outfitName, outfitItems).then(response => {
+    const handleUpdateOutfitRequest = () => {
+        OutfitApi.updateOutfit(outfitUuid, {name: outfitName, items: outfitItems}).then(response => {
             console.log(response);
+            handleOpenEditOutfitDialog();
+            onOutfitUpdated();
+            toast.success('Outfit updated');
         }).catch(error => {
             console.error(error);
-        });
+            toast.error('Error updating outfit');
+        })
     }
 
     const handleCancel = () => {
-        handleOpenAddOutfitDialog();
-        setOutfitName('');
-        setOutfitItems([]);
+        handleOpenEditOutfitDialog();
+    }
+
+    const fetchOutfitData = async () => {
+        OutfitApi.getOutfitByUuId(outfitUuid).then(r => {
+            setSelectedItems({
+                top: r.items.find(item => item.bodyPart === 'TOP'),
+                bottom: r.items.find(item => item.bodyPart === 'BOTTOM'),
+                shoes: r.items.find(item => item.bodyPart === 'SHOES'),
+                accessory: r.items.find(item => item.bodyPart === 'ACCESSORY'),
+            });
+            setOutfitItems(r.items.map(item => item.uuid));
+            setOutfitName(r.name);
+        })
+    }
+
+    const handleDeleteOutfit = async (uuid: string) => {
+        try {
+            await OutfitApi.deleteOutfit(uuid);
+            handleOpenEditOutfitDialog();
+            onOutfitUpdated();
+            toast.success('Outfit deleted');
+        } catch (error) {
+            console.error(error);
+            toast.error('Error deleting outfit');
+        }
+    }
+
+    const handleDuplicateOutfit = async (uuid: string) => {
+        try {
+            await OutfitApi.duplicateOutfit(uuid);
+            handleOpenEditOutfitDialog();
+            onOutfitUpdated();
+            toast.success('Outfit duplicated');
+        } catch (error) {
+            console.error(error);
+            toast.error('Error duplicating outfit');
+        }
     }
 
     return (
-        <Dialog size={'xl'} open={isAddOutfitDialogOpen} handler={handleOpenAddOutfitDialog}>
+        <Dialog size={'xl'} open={isEditOutfitDialogOpen} handler={handleOpenEditOutfitDialog}
+                aria-labelledby="edit-outfit-dialog-title"
+                aria-describedby="edit-outfit-dialog-description">
             <DialogHeader className="flex justify-center">
-                <Typography className='text-3xl font-black'>Add New Outfit</Typography>
+                <Typography id="edit-outfit-dialog-title" className='text-3xl font-black'>Edit Outfit</Typography>
             </DialogHeader>
-            <DialogBody>
-                Mannequin
+            <DialogBody id="edit-outfit-dialog-description">
                 <div className='flex flex-row gap-8 justify-evenly'>
                     <div className='grow flex flex-row gap-8 justify-center items-center'>
                         <div className='w-40 h-40 border-2 border-gray-300 rounded-lg flex justify-center items-center'>
                             {selectedItems.accessory ? (
-                                <img src={selectedItems.accessory.image} alt="Accessory"
+                                <img src={`data:image/jpeg;base64,${selectedItems.accessory.image}`} alt="Accessory"
                                      className="w-full h-full object-contain"/>
                             ) : (
                                 'Accessory'
@@ -104,12 +156,14 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
                                value={outfitName}
                                onChange={(e) => setOutfitName(e.target.value)}/>
                     </div>
-                    <Button color='red' className='grow' onClick={handleCancel}>Cancel</Button>
-                    <Button className='bg-darkcyan grow' onClick={handleAddOutfitRequest}>Add Outfit</Button>
+                    <Button className='bg-indigo-300 grow' onClick={handleCancel}>Cancel</Button>
+                    <Button className='bg-red-600 grow' onClick={() => handleDeleteOutfit(outfitUuid)}>Delete Outfit</Button>
+                    <Button className='bg-light-blue-600 grow' onClick={() => handleDuplicateOutfit(outfitUuid)}>Duplicate Outfit</Button>
+                    <Button className='bg-darkcyan grow' onClick={handleUpdateOutfitRequest}>Update Outfit</Button>
                 </div>
             </DialogFooter>
         </Dialog>
     );
 };
 
-export default OutfitCreator;
+export default EditOutfit;
