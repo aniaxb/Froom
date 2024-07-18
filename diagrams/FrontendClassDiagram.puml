@@ -1,17 +1,20 @@
 @startuml
 
 left to right direction
+allow_mixing
 
 component Frontend {
-    class Landing
-    class About
-    class Contact
-    class Login
-    class Register
-    class Wardrobe
-    class Outfit
-    class NavBar
-    class Profile
+
+    component Login
+    component Register
+    component Wardrobe
+    component Outfit
+    component NavBar
+    component Profile
+
+    component Landing
+    component About
+    component Contact
 
     component APIs {
     class AuthApi
@@ -27,6 +30,8 @@ component Frontend {
     Outfit --(0-- ItemApi
     NavBar --(0-- UserApi
     Profile --(0-- UserApi
+    Outfit --(0-- OutfitApi
+    Wardrobe --(0-- CategoryApi
 }
 
 @enduml
