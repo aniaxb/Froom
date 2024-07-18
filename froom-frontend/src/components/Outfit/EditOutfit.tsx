@@ -5,26 +5,28 @@ import {Button, Dialog, DialogBody, DialogFooter, DialogHeader, Input, Typograph
 import {OutfitApi} from '../../apis/OutfitApi.ts';
 import OutfitItems from './OutfitItems.tsx';
 import {toast} from 'react-hot-toast';
+import {Outfit} from '../../model/Outfit.ts';
 
 interface EditOutfitProps {
     isEditOutfitDialogOpen: boolean;
-    handleOpenEditOutfitDialog: () => void;
+    handleOpenEditOutfitDialog: (outfit: Outfit | undefined) => void;
     uuid: string;
     onOutfitUpdated: () => void;
 }
 
-const EditOutfit: React.FC<EditOutfitProps> = ({
-                                                   isEditOutfitDialogOpen: isEditOutfitDialogOpen,
-                                                   handleOpenEditOutfitDialog: handleOpenEditOutfitDialog,
-                                                   uuid: outfitUuid,
-                                                   onOutfitUpdated
-}) => {
+const EditOutfit: React.FC<EditOutfitProps> =  ({
+                                                         isEditOutfitDialogOpen: isEditOutfitDialogOpen,
+                                                         handleOpenEditOutfitDialog: handleOpenEditOutfitDialog,
+                                                         uuid: outfitUuid,
+                                                         onOutfitUpdated
+                                                     }) => {
     const [selectedItems, setSelectedItems] = useState<{
         top?: Item;
         bottom?: Item;
         shoes?: Item;
         accessory?: Item;
     }>({});
+    const [outfit, setOutfit] = useState<Outfit>();
     const [outfitName, setOutfitName] = useState('');
     const [outfitItems, setOutfitItems] = useState<string[]>([]);
 
@@ -33,21 +35,27 @@ const EditOutfit: React.FC<EditOutfitProps> = ({
     }, []);
 
     const handleItemSelect = (item: Item) => {
-        setSelectedItems((prevItems) => ({
+        const bodyPart = item.bodyPart.toLowerCase() as keyof typeof selectedItems;
+
+        if (bodyPart in selectedItems) {
+            setOutfitItems(prevItems => prevItems.map(prevUuid =>
+                prevUuid === selectedItems[bodyPart]!.uuid ? item.uuid : prevUuid
+            ));
+        } else {
+            setOutfitItems(prevItems => [...prevItems, item.uuid]);
+        }
+
+        setSelectedItems(prevItems => ({
             ...prevItems,
-            [item.bodyPart.toLowerCase()]: item,
+            [bodyPart]: item,
         }));
-        setOutfitItems((prevItems) => [
-            ...prevItems,
-            item.uuid]
-        );
     };
 
     const handleUpdateOutfitRequest = () => {
         OutfitApi.updateOutfit(outfitUuid, {name: outfitName, items: outfitItems}).then(response => {
             console.log(response);
-            handleOpenEditOutfitDialog();
             onOutfitUpdated();
+            handleOpenEditOutfitDialog(outfit);
             toast.success('Outfit updated');
         }).catch(error => {
             console.error(error);
@@ -56,11 +64,12 @@ const EditOutfit: React.FC<EditOutfitProps> = ({
     }
 
     const handleCancel = () => {
-        handleOpenEditOutfitDialog();
+        handleOpenEditOutfitDialog(outfit);
     }
 
     const fetchOutfitData = async () => {
         OutfitApi.getOutfitByUuId(outfitUuid).then(r => {
+            setOutfit(r);
             setSelectedItems({
                 top: r.items.find(item => item.bodyPart === 'TOP'),
                 bottom: r.items.find(item => item.bodyPart === 'BOTTOM'),
@@ -75,7 +84,7 @@ const EditOutfit: React.FC<EditOutfitProps> = ({
     const handleDeleteOutfit = async (uuid: string) => {
         try {
             await OutfitApi.deleteOutfit(uuid);
-            handleOpenEditOutfitDialog();
+            handleOpenEditOutfitDialog(outfit);
             onOutfitUpdated();
             toast.success('Outfit deleted');
         } catch (error) {
@@ -87,7 +96,7 @@ const EditOutfit: React.FC<EditOutfitProps> = ({
     const handleDuplicateOutfit = async (uuid: string) => {
         try {
             await OutfitApi.duplicateOutfit(uuid);
-            handleOpenEditOutfitDialog();
+            handleOpenEditOutfitDialog(outfit);
             onOutfitUpdated();
             toast.success('Outfit duplicated');
         } catch (error) {
@@ -157,8 +166,10 @@ const EditOutfit: React.FC<EditOutfitProps> = ({
                                onChange={(e) => setOutfitName(e.target.value)}/>
                     </div>
                     <Button className='bg-indigo-300 grow' onClick={handleCancel}>Cancel</Button>
-                    <Button className='bg-red-600 grow' onClick={() => handleDeleteOutfit(outfitUuid)}>Delete Outfit</Button>
-                    <Button className='bg-light-blue-600 grow' onClick={() => handleDuplicateOutfit(outfitUuid)}>Duplicate Outfit</Button>
+                    <Button className='bg-red-600 grow' onClick={() => handleDeleteOutfit(outfitUuid)}>Delete
+                        Outfit</Button>
+                    <Button className='bg-light-blue-600 grow' onClick={() => handleDuplicateOutfit(outfitUuid)}>Duplicate
+                        Outfit</Button>
                     <Button className='bg-darkcyan grow' onClick={handleUpdateOutfitRequest}>Update Outfit</Button>
                 </div>
             </DialogFooter>

@@ -3,7 +3,7 @@ import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from api.routes import api
+from api.API_routes import api
 from exceptions.exception_handlers import handle_500_error, handle_bad_request
 
 app = Flask(__name__)

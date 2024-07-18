@@ -5,9 +5,7 @@ import com.froom.froombackend.items.model.domain.Category
 import com.froom.froombackend.items.service.CategoryService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/category")
@@ -19,7 +17,12 @@ class CategoryController (val categoryService: CategoryService) {
     }
 
     @GetMapping("/bodypart")
-    fun getBodyPartCategories(): ResponseEntity<List<BodyPart>> {
+    fun getBodyParts(): ResponseEntity<List<BodyPart>> {
         return ResponseEntity<List<BodyPart>>(categoryService.getBodyParts(), HttpStatus.OK)
+    }
+
+    @GetMapping("/bodypart/{bodyPart}")
+    fun getCategoriesByBodyPart(@PathVariable bodyPart: BodyPart): ResponseEntity<List<Category>> {
+        return ResponseEntity<List<Category>>(categoryService.getCategoriesByBodyPart(bodyPart), HttpStatus.OK)
     }
 }

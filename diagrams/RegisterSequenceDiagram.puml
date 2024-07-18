@@ -1,36 +1,34 @@
 @startuml
 
-title "Successful registration of a new user"
+title "Pomyślna rejestracja nowego użytkownika"
 
-participant "User" as User
-participant "Browser" as Browser
-participant "Server" as Server
+participant "Użytkownik" as User
+participant "Przeglądarka" as Browser
+participant "Serwer" as Server
 
-User -> Browser: Open the registration page
-Browser -> Server: Send a request to open the registration page
+User -> Browser: Otwórz stronę rejestracji
+Browser -> Server: Wyślij żądanie otwarcia strony rejestracji
 activate Server
-Server -> Browser: Send the registration page
+Server -> Browser: Wyślij stronę rejestracji
 deactivate Server
-Browser -> User: Show the registration page
-User -> Browser: Fill in the registration form and send it
+Browser -> User: Pokaż stronę rejestracji
+User -> Browser: Wypełnij formularz rejestracyjny i wyślij go
 activate Server
-Browser -> Server: Send the registration form
-Server -> Browser: Check the form
-alt correct
-    Server -> Browser: Send the success message
-    Browser -> User: Show the success message
-else incorrect
-    Server -> Browser: Send the error message
-    Browser -> User: Show the error message
+Browser -> Server: Wyślij formularz rejestracyjny
+Server -> Browser: Sprawdź formularz
+alt poprawny
+    Server -> Browser: Wyślij wiadomość o sukcesie
+    Browser -> User: Pokaż wiadomość o sukcesie
+else niepoprawny
+    Server -> Browser: Wyślij wiadomość o błędzie
+    Browser -> User: Pokaż wiadomość o błędzie
 end
-'Server -> Browser: Registration successful
-'Browser -> User: Show the success message
 deactivate Server
-User -> Browser: Redirect to wardrobe page
-Browser -> Server: Send a request to redirect to wardrobe page
+User -> Browser: Przekieruj na stronę garderoby
+Browser -> Server: Wyślij żądanie przekierowania na stronę garderoby
 activate Server
-Server -> Browser: Redirect to wardrobe page
-Browser -> User: Show the wardrobe page
+Server -> Browser: Przekieruj na stronę garderoby
+Browser -> User: Pokaż stronę garderoby
 deactivate Server
 
 @enduml

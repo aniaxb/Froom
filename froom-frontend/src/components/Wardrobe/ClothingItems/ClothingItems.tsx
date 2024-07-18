@@ -19,6 +19,7 @@ import {Outfit} from '../../../model/Outfit.ts';
 import {toast} from 'react-hot-toast';
 import OutfitCreator from '../../Outfit/OutfitCreator.tsx';
 import EditOutfit from '../../Outfit/EditOutfit.tsx';
+import {CategoryApi} from '../../../apis/CategoryApi.ts';
 
 interface ClothingItemsProps {
     activeBodyPart: string;
@@ -32,7 +33,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
     const [newBodyPart, setNewBodyPart] = useState<string | undefined>('');
     const [newColor, setNewColor] = useState(['']);
     const [outfits, setOutfits] = useState<Outfit[]>([]);
-    const [selectedOutfit, setSelectedOutfit] = useState<Outfit | null>(null);
+    const [selectedOutfit, setSelectedOutfit] = useState<Outfit | undefined | null>(null);
 
     const [selectedCategory, setSelectedCategory] = useState<string>();
     const [selectedColor, setSelectedColor] = useState<string>();
@@ -48,12 +49,31 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
     const [isAddOutfitDialogOpen, setIsAddOutfitDialogOpen] = useState(false);
     const [isEditOutfitDialogOpen, setIsEditOutfitDialogOpen] = useState(false);
     const [filterColors, setFilterColors] = useState<string[]>([]);
+    const [bodyPartCategories, setBodyPartCategories] = useState<Category[]>([]);
 
     useEffect(() => {
         fetchAllColorsFromItems();
         fetchClothingItems();
         fetchOutfits();
     }, []);
+
+    useEffect(() => {
+        const fetchBodyPartCategories = async () => {
+            try {
+                const categoriesFromApi = await CategoryApi.getBodyPartCategories(BodyPart[activeBodyPart.toUpperCase() as keyof typeof BodyPart]);
+                const categories = categoriesFromApi.map(categoryString => Category[categoryString.toUpperCase() as keyof typeof Category]);
+
+                setBodyPartCategories(categories);
+
+            } catch (error) {
+                console.error('Error fetching body part categories:', error);
+            }
+        };
+
+        if (activeBodyPart) {
+            fetchBodyPartCategories();
+        }
+    }, [activeBodyPart]);
 
     useEffect(() => {
         if (selectedItem) {
@@ -85,6 +105,8 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
 
     const handleOutfitUpdated = () => {
         fetchOutfits();
+        setIsEditOutfitDialogOpen(false);
+        setSelectedOutfit(null);
     };
 
     const handleUpdateItem = async (uuid: string) => {
@@ -126,10 +148,10 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
             handleOpenDialog();
             await fetchClothingItems();
             toast.success('Item deleted');
-        } catch (error) {
-            console.error(error);
-            toast.error('Error deleting item');
-        }
+            } catch (error) {
+                console.error(error);
+                toast.error('Error deleting item');
+            }
     }
 
     const getGridClassNames = () => {
@@ -252,7 +274,8 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
         setIsAddOutfitDialogOpen(!isAddOutfitDialogOpen);
     };
 
-    const handleOpenEditOutfitDialog = () => {
+    const handleOpenEditOutfitDialog = (outfit: Outfit | undefined) => {
+        setSelectedOutfit(outfit);
         setIsEditOutfitDialogOpen(!isEditOutfitDialogOpen);
     };
 
@@ -272,24 +295,11 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e as string)}
                     >
-                        {Object.values(Category).map((category) => (
+                        {bodyPartCategories.map((category) => (
                             <Option key={category} value={category}>{category}</Option>
                         ))}
                     </Select>
                 </div>
-                {/*<div className='grow'>*/}
-                {/*    <Select*/}
-                {/*        variant="outlined"*/}
-                {/*        label="Filter by colors"*/}
-                {/*        value={selectedColor}*/}
-                {/*        // onChange={(e) => handleColorChangeSelect(e as string)}*/}
-                {/*        // onChange={(e) => setSelectedColor(e)}*/}
-                {/*    >*/}
-                {/*        {filterColors?.map((color) => (*/}
-                {/*            <Option key={color} value={color}>{color}</Option>*/}
-                {/*        ))}*/}
-                {/*    </Select>*/}
-                {/*</div>*/}
                 <div className='grow'>
                     <Select
                         label="Filter by colors"
@@ -422,6 +432,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
                             <Button className='bg-lightblue w-full'
                                     onClick={() => {
                                         handleUpdateItemRequest(uuid);
+                                        fetchClothingItems();
                                         handleOpen();
                                     }}>
                                 Update
@@ -430,7 +441,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
                         <div className="w-1/3">
                             <Button onClick={() => {
                                 handleOpen();
-                                window.location.reload();
+                                fetchClothingItems();
                             }} className='mr-1 bg-red-500 w-full'>
                                 Close
                             </Button>
@@ -438,7 +449,8 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
                     </DialogFooter>
                 </Dialog>
                 <OutfitCreator isAddOutfitDialogOpen={isAddOutfitDialogOpen}
-                               handleOpenAddOutfitDialog={handleOpenAddOutfitDialog}/>
+                               handleOpenAddOutfitDialog={handleOpenAddOutfitDialog}
+                               onOutfitUpdated={handleOutfitUpdated}/>
             </div>
             <div className="bg-gray-200 rounded-lg overflow-y-scroll max-h-[28rem] md:max-h-[30rem] lg:max-h-[40rem] xl:max-h-[44rem] flex-grow">
                 <div className={getGridClassNames()}>
@@ -446,8 +458,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
                         <>
                             {outfits.map(outfit => (
                                 <div key={outfit.uuid} className="relative group" onClick={() => {
-                                    setSelectedOutfit(outfit);
-                                    setIsEditOutfitDialogOpen(!isEditOutfitDialogOpen);
+                                    handleOpenEditOutfitDialog(outfit);
                                 }}>
                                     <div
                                         className="flex flex-row justify-center items-center gap-4 p-4 border-2 border-gray-300 rounded-lg">

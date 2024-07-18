@@ -1,18 +1,25 @@
 @startuml
 
 component "Data Analysis" {
-    class BackgroundRemoval
-    class ColorExtraction
-    class CategoryDetection
-
-    component API {
-    class routes as "API"
+    class BackgroundRemoval {
+        +async remove_background(image_file)
+    }
+    class ColorExtraction {
+        +detect_colors(image_file)
+        +closest_color(rgb_tuple)
+    }
+    class CategoryDetection {
+        +detect_category(file)
     }
 
-    BackgroundRemoval --> routes
-    ColorExtraction --> routes
-    CategoryDetection --> routes
+    class API {
+        +background_and_color()
+        +predict()
+    }
 
+    BackgroundRemoval --> API: uses
+    ColorExtraction --> API: uses
+    CategoryDetection --> API: uses
 }
 
 @enduml

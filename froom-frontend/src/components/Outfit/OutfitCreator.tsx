@@ -9,9 +9,10 @@ import {toast} from 'react-hot-toast';
 interface OutfitCreatorProps {
     isAddOutfitDialogOpen: boolean;
     handleOpenAddOutfitDialog: () => void;
+    onOutfitUpdated: () => void;
 }
 
-const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isAddOutfitDialogOpen, handleOpenAddOutfitDialog: handleOpenAddOutfitDialog}) => {
+const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isAddOutfitDialogOpen, handleOpenAddOutfitDialog: handleOpenAddOutfitDialog, onOutfitUpdated}) => {
     const [selectedItems, setSelectedItems] = useState<{
         top?: Item;
         bottom?: Item;
@@ -36,7 +37,7 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
         OutfitApi.createOutfit(outfitName, outfitItems).then(response => {
             console.log(response);
             handleOpenAddOutfitDialog();
-            fetchOutfits();
+            onOutfitUpdated();
             toast.success('Outfit created');
         }).catch(error => {
             console.error(error);
@@ -61,7 +62,7 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
                 accessory: response.items.find(item => item.bodyPart === 'ACCESSORY'),
             });
             handleOpenAddOutfitDialog();
-            fetchOutfits();
+            onOutfitUpdated();
         }).catch(error => {
             console.error(error);
         });
@@ -71,12 +72,6 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
         handleOpenAddOutfitDialog();
         setOutfitName('');
         setOutfitItems([]);
-    }
-
-    const fetchOutfits = async () => {
-        OutfitApi.getAllOutfits().then(r => {
-            console.log(r);
-        }).catch(e => console.error(e));
     }
 
     return (
