@@ -1,5 +1,6 @@
 import { Category } from '../model/enums/Category';
 import axios from 'axios';
+import {BodyPart} from '../model/enums/BodyPart.ts';
 
 export class CategoryApi {
 
@@ -13,7 +14,7 @@ export class CategoryApi {
         });
     }
 
-    static getBodyPartCategories(): Promise<Category[]> {
+    static getBodyParts(): Promise<Category[]> {
         return axios.get(`${import.meta.env.VITE_BACKEND_URL}/category/bodypart`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -21,5 +22,14 @@ export class CategoryApi {
         }).then(response => {
             return response.data;
         });
+    }
+
+    static async getBodyPartCategories(bodyPart: BodyPart): Promise<Category[]> {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/category/bodypart/${bodyPart}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response.data;
     }
 }

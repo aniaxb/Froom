@@ -1,28 +1,16 @@
 import BodyPartMenu from './CategoryMenu/BodyPartMenu.tsx';
 import ClothingItems from './ClothingItems/ClothingItems.tsx';
 import NavBar from '../NavBar/NavBar.tsx';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {BodyPart} from '../../model/enums/BodyPart.ts';
 
 const Wardrobe = () => {
 
 const [activeBodyPart, setActiveBodyPart] = useState<string>(BodyPart.TOP);
-    const [selectedFilters, setSelectedFilters] = useState({
-        category: '',
-        color: [] as string[],
-    });
 
     const handleBodyPartClick = (bodyPart: string) => {
         setActiveBodyPart(bodyPart);
     };
-
-    const handleFiltersChange = (filters: any) => {
-        setSelectedFilters(filters);
-    };
-
-    useEffect(() => {
-        handleFiltersChange(selectedFilters);
-    }, [selectedFilters]);
 
 return (
     <>
@@ -45,4 +33,4 @@ return (
         );
 }
 
-        export default Wardrobe;
+export default Wardrobe;
