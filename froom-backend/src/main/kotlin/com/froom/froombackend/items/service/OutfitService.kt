@@ -47,6 +47,9 @@ class OutfitService(
         if (items.size < 2) {
             throw Exception("Cannot create outfit with less than 2 items")
         }
+        else if (items.size > 5) {
+            throw Exception("Cannot create outfit with more than 5 items")
+        }
         val bodyParts = items.map { it.category.bodyPart }
         if (bodyParts.size != bodyParts.distinct().size) {
             throw Exception("Cannot create outfit with duplicate body parts")
@@ -82,16 +85,17 @@ class OutfitService(
         return outfit.toDto()
     }
 
-    @Transactional
-    fun updateOutfit(command: UpdateOutfitCommand, uuid: UUID, user: User): OutfitDto {
-        val outfit = outfitRepository.findOutfitByUuid(uuid) ?: throw Exception(NOT_FOUND)
-        if (outfit.user.uuid != user.uuid) {
-            throw Exception("Cannot update outfit: $uuid, user: ${user.uuid} does not own the outfit.")
-        }
-        outfit.name = command.name
-        outfit.items = command.items.mapNotNull { itemRepository.findByUuid(it) }.toMutableList()
-        logger.info("Outfit updated: $outfit")
-        return outfitRepository.save(outfit).toDto()
+  @Transactional
+  fun updateOutfit(command: UpdateOutfitCommand, uuid: UUID, user: User): OutfitDto {
+      val outfit = outfitRepository.findOutfitByUuid(uuid) ?: throw Exception(NOT_FOUND)
+      if (outfit.user.uuid != user.uuid) {
+          throw Exception("Cannot update outfit: $uuid, user: ${user.uuid} does not own the outfit.")
+      }
+      outfit.name = command.name
+      outfit.items = command.items.mapNotNull { itemRepository.findByUuid(it) }.toMutableList()
+      checkIfItemsInOutfitAreCorrect(outfit.items)
+      logger.info("Outfit updated: $outfit")
+      return outfitRepository.save(outfit).toDto()
     }
 
     @Transactional

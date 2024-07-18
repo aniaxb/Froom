@@ -14,4 +14,8 @@ class CategoryService {
     fun getBodyParts(): List<BodyPart> {
         return BodyPart.entries
     }
+
+    fun getCategoriesByBodyPart(bodyPart: BodyPart): List<Category> {
+        return Category.entries.filter { it.bodyPart == bodyPart }
+    }
 }

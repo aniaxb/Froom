@@ -101,7 +101,7 @@ class OutfitController(val outfitService: OutfitService) {
             HttpStatus.OK)
     }
 
-    @GetMapping("")
+    @GetMapping("/{outfitUuid}/items")
     fun getOutfitItems(
         @RequestParam(required = true) outfitUuid: UUID
     ): ResponseEntity<List<ItemDto>> {
