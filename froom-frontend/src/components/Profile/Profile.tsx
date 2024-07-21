@@ -99,7 +99,7 @@ const Profile = () => {
                                        value={username}
                                        onChange={(e) => setUsername(e.target.value)}
                                 />
-                                <Input type="email" label="Em-ail"
+                                <Input type="email" label="E-mail"
                                        value={email}
                                        onChange={(e) => setEmail(e.target.value)}
                                 />

@@ -14,7 +14,7 @@ import Login from './components/Login/Login.tsx';
 import Register from './components/Register/Register.tsx';
 import Profile from './components/Profile/Profile.tsx';
 import {Toaster} from 'react-hot-toast';
-import AuthWrapper from './authWrapper.tsx';
+import AuthWrapper from './AuthWrapper.tsx';
 
 const router = createBrowserRouter([
     {
