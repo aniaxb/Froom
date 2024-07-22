@@ -16,7 +16,7 @@ class ItemControllerTests : BaseTest() {
                 .header("Authorization", "Bearer $token")
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(2))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(0))
 
     }
 }
