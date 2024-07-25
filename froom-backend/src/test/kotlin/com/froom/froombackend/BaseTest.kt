@@ -3,14 +3,14 @@ package com.froom.froombackend
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
-@ContextConfiguration(classes = [TestHelper::class])
-@WebMvcTest
+@SpringBootTest(classes = [FroomBackendApplication::class])
+@AutoConfigureMockMvc
 abstract class BaseTest {
 
     @Autowired
@@ -36,11 +36,4 @@ abstract class BaseTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
 
-    fun deleteUser() {
-        mockMvc.perform (
-            MockMvcRequestBuilders.delete("/user")
-                .header("Authorization", "Bearer $token")
-        )
-            .andExpect(MockMvcResultMatchers.status().isOk)
-    }
 }
