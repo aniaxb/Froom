@@ -150,14 +150,12 @@ class OutfitService(
     @Transactional
     fun generateRandomOutfit(user: User): OutfitDto {
         val items = itemRepository.findByUserUuid(user.uuid).map { it.toDto() }
-        val bodyParts = BodyPart.entries.toTypedArray()
+        val bodyParts = BodyPart.entries.filter { it != BodyPart.UNKNOWN }.toTypedArray()
 
-        // Create a map of items by body part
         val itemsByBodyPart = bodyParts.associateWith { bodyPart ->
             items.filter { it.category.bodyPart == bodyPart }
         }
 
-        // Check if there are enough items to create an outfit
         val missingBodyParts = itemsByBodyPart.filter { it.value.isEmpty() }.keys
         when {
             missingBodyParts.isNotEmpty() -> {
@@ -179,8 +177,6 @@ class OutfitService(
             }
         }
     }
-
-
 
     fun getSimilarItemsToBaseItemByColor(baseItem: Item, items: List<Item>): List<Item> {
         val itemByBodyPart = items.groupBy { it.category.bodyPart }
