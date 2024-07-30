@@ -1,6 +1,8 @@
 package com.froom.froombackend.user.service
 
 import com.froom.froombackend.authorization.service.HashService
+import com.froom.froombackend.exceptions.type.InvalidCredentialsException
+import com.froom.froombackend.exceptions.type.UserNotFoundException
 import com.froom.froombackend.user.model.command.RegisterUserCommand
 import com.froom.froombackend.user.model.command.UpdatePasswordCommand
 import com.froom.froombackend.user.model.command.UpdateUserCommand
@@ -27,7 +29,7 @@ class UserService (
 
     fun findByUuid(uuid: UUID): User? {
         return userRepository.findByUuid(uuid).orElseThrow {
-            Exception("User not found")
+            UserNotFoundException("User not found")
         }
     }
 
@@ -46,7 +48,7 @@ class UserService (
     @Transactional
     fun registerUser(command: RegisterUserCommand): UserDto {
         if (isUserEmailExists(command.email)) {
-            throw Exception("User with email ${command.email} already exists")
+            throw InvalidCredentialsException("User with email ${command.email} already exists")
         }
         return createUser(command).toDto()
     }
@@ -74,10 +76,10 @@ class UserService (
         val existingUserByEmail = findByEmail(command.email)
         val existingUserByUsername = findByUsername(command.username)
         if (existingUserByEmail != null && existingUserByEmail.uuid != user.uuid) {
-            throw Exception("User with email ${command.email} already exists")
+            throw InvalidCredentialsException("User with email ${command.email} already exists")
         }
         if (existingUserByUsername != null && existingUserByUsername.uuid != user.uuid) {
-            throw Exception("User with username ${command.username} already exists")
+            throw InvalidCredentialsException("User with username ${command.username} already exists")
         }
 
         user.email = command.email
@@ -92,7 +94,7 @@ class UserService (
     @Transactional
     fun updatePassword(command: UpdatePasswordCommand, user: User): UserDto {
         if (!hashService.checkBcrypt(command.oldPassword, user.password)) {
-            throw Exception("Invalid old password")
+            throw InvalidCredentialsException("Invalid old password")
         }
 
         val newPassword = command.newPassword
@@ -100,10 +102,10 @@ class UserService (
 
         when {
             newPassword != newPasswordConfirmation -> {
-                throw Exception("New password and confirm password do not match")
+                throw InvalidCredentialsException("New password and confirm password do not match")
             }
             newPassword == command.oldPassword -> {
-                throw Exception("New password must be different from the old password")
+                throw InvalidCredentialsException("New password must be different from the old password")
             }
             else -> {
                 user.password = hashService.hashBcrypt(newPassword)

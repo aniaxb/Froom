@@ -9,7 +9,13 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error fetching Outfits');
+            }
+        })
     }
 
     static getOutfitByUuId(uuid: string): Promise<Outfit> {
@@ -19,7 +25,13 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error fetching Outfit');
+            }
+        })
     }
 
     static createOutfit(name: string, itemUuids: string[]): Promise<Outfit> {
@@ -32,7 +44,13 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error creating Outfit');
+            }
+        })
     }
 
     static addItemToOutfit(outfitUuid: string, itemUuid: string): Promise<Outfit> {
@@ -42,7 +60,13 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error adding Item to Outfit');
+            }
+        })
     }
 
     static removeItemFromOutfit(outfitUuid: string, itemUuid: string): Promise<Outfit> {
@@ -52,7 +76,14 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error removing Item from Outfit');
+            }
+        })
+
     }
 
     static updateOutfit(uuid: string, data: { name: string; items: string[]; }):  Promise<Outfit> {
@@ -65,7 +96,13 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error updating Outfit');
+            }
+        })
     }
 
     static deleteOutfit(uuid: string): Promise<void> {
@@ -75,7 +112,13 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error deleting Outfit');
+            }
+        })
     }
 
     static duplicateOutfit(uuid: string): Promise<Outfit> {
@@ -86,7 +129,13 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error duplicating Outfit');
+            }
+        })
     }
 
     static getOuftfitByName(name: string): Promise<Outfit> {
@@ -98,7 +147,14 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error fetching Outfit');
+            }
+        })
+
     }
 
     static getRandomOutfit(): Promise<Outfit> {
@@ -108,6 +164,12 @@ export class OutfitApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error generating random Outfit');
+            }
+        })
     }
 }

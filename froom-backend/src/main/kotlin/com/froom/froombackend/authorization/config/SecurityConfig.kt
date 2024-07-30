@@ -54,6 +54,7 @@ class SecurityConfig (
                 cors.configurationSource { _ ->
                     val configuration = CorsConfiguration()
                     configuration.allowedOrigins = listOf("http://127.0.0.1:5173")
+                    configuration.allowedOrigins = listOf("http://localhost:5173")
                     configuration.allowedMethods = listOf("*")
                     configuration.allowedHeaders = listOf("*")
                     configuration.allowCredentials = true

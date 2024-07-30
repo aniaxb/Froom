@@ -125,7 +125,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
             toast.success('Item updated');
         }).catch(e => {
             console.error(e);
-            toast.error('Error updating item');
+            toast.error(e.message);
         });
     }
 
@@ -138,7 +138,9 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
             toast.success('Image updated');
         }
         catch (error) {
+            const errorMess = (error as Error).message;
             console.error(error);
+            toast.error(errorMess);
         }
     }
 
@@ -149,8 +151,9 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
             await fetchClothingItems();
             toast.success('Item deleted');
             } catch (error) {
+                const errorMess = (error as Error).message;
                 console.error(error);
-                toast.error('Error deleting item');
+                toast.error(errorMess);
             }
     }
 
@@ -190,6 +193,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
             })
             .catch(error => {
                 console.error('Error fetching items:', error);
+                toast(error.message);
             });
     };
 
@@ -239,7 +243,11 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
                 success: 'Image analyzed successfully!',
                 error: 'Failed to analyze image',
             }
-        ).then(r => console.log(r));
+        ).then(r => console.log(r))
+            .catch(e => {
+                console.error(e)
+                toast(e.message);
+            });
     };
 
     const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -259,7 +267,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
             toast.success('Item updated');
         }).catch(error => {
             console.error(error);
-            toast.error('Error updating item');
+            toast.error(error.message);
         });
     };
 
@@ -569,7 +577,7 @@ const ClothingItems: React.FC<ClothingItemsProps> = ({activeBodyPart: activeBody
                                 />
                                 <label htmlFor="image-input" className="w-full flex justify-center">
                                     <div
-                                        className="shadow-lg bg-indigo-300 text-white py-3 px-6 rounded-lg w-full text-center text-xs hover:shadow-indigo-100 hover:cursor-pointer">
+                                        className="shadow-lg bg-indigo-300 text-white py-3 px-6 rounded-lg w-full text-center font-bold text-xs hover:shadow-indigo-100 hover:cursor-pointer">
                                         CLICK TO CHANGE IMAGE
                                     </div>
                                 </label>

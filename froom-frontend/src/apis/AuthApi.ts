@@ -9,7 +9,13 @@ export class AuthApi {
             password: password
         }).then(response => {
             return response.data
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error logging in');
+            }
+        })
     }
 
     static refresh(refreshToken: string) {
@@ -17,7 +23,13 @@ export class AuthApi {
             refreshToken: refreshToken
         }).then(response => {
             return response.data
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error refreshing token');
+            }
+        })
     }
 
     static setAuthToken(token: string): void {

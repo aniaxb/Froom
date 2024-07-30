@@ -22,7 +22,13 @@ export class ItemApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error fetching Items');
+            }
+        })
     }
 
     static getItemByUuId(uuid: string): Promise<Item> {
@@ -32,7 +38,13 @@ export class ItemApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error fetching Item');
+            }
+        })
     }
 
     static async createItem(file: File): Promise<ItemResponse> {
@@ -44,7 +56,13 @@ export class ItemApi {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'multipart/form-data'
             }
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error creating Item');
+            }
+        })
         return response.data;
     }
 
@@ -57,7 +75,13 @@ export class ItemApi {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'multipart/form-data'
             }
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error creating Item');
+            }
+        })
         return response.data;
     }
 
@@ -72,7 +96,13 @@ export class ItemApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error updating Item');
+            }
+        })
     }
 
     static updateItemImage(file: File, uuid: string): Promise<void> {
@@ -86,7 +116,13 @@ export class ItemApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error updating Item image');
+            }
+        })
     }
 
     static deleteItem(uuid: string): Promise<void> {
@@ -96,7 +132,13 @@ export class ItemApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error deleting Item');
+            }
+        })
     }
 
     static getItemsByFilter(category?: string | undefined, bodyPart?: string, color?: string): Promise<Item[]> {
@@ -111,7 +153,13 @@ export class ItemApi {
             }
         }).then(response => {
             return response.data;
-        });
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error fetching Item');
+            }
+        })
     }
 
 }

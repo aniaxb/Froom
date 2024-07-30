@@ -38,7 +38,7 @@ const About = () => {
                         <Typography variant="h1">What do we do?</Typography>
                         <Typography variant="paragraph" className="text-lg">
                             We provide a platform for users to upload their clothes, categorize them, and create
-                            outfits. We also provide features to sort and filter your clothes.</Typography>
+                            outfits. Froom also provides features to filter your clothes.</Typography>
                     </div>
                 </div>
                 <div className="flex flex-row mb-16 justify-evenly items-center">

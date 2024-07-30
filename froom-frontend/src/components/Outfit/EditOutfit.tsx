@@ -59,7 +59,7 @@ const EditOutfit: React.FC<EditOutfitProps> =  ({
             toast.success('Outfit updated');
         }).catch(error => {
             console.error(error);
-            toast.error('Error updating outfit');
+            toast.error(error.message);
         })
     }
 
@@ -88,8 +88,9 @@ const EditOutfit: React.FC<EditOutfitProps> =  ({
             onOutfitUpdated();
             toast.success('Outfit deleted');
         } catch (error) {
+            const errorMess = (error as Error).message;
             console.error(error);
-            toast.error('Error deleting outfit');
+            toast.error(errorMess);
         }
     }
 
@@ -100,8 +101,9 @@ const EditOutfit: React.FC<EditOutfitProps> =  ({
             onOutfitUpdated();
             toast.success('Outfit duplicated');
         } catch (error) {
+            const errorMess = (error as Error).message;
             console.error(error);
-            toast.error('Error duplicating outfit');
+            toast.error(errorMess);
         }
     }
 

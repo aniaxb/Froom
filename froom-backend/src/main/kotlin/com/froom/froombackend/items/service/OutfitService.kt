@@ -1,5 +1,7 @@
 package com.froom.froombackend.items.service
 
+import com.froom.froombackend.exceptions.type.OutfitCreationException
+import com.froom.froombackend.exceptions.type.OutfitNotFoundException
 import com.froom.froombackend.items.model.command.CreateOutfitCommand
 import com.froom.froombackend.items.model.command.UpdateOutfitCommand
 import com.froom.froombackend.items.model.domain.BodyPart
@@ -45,14 +47,14 @@ class OutfitService(
 
     fun checkIfItemsInOutfitAreCorrect(items: List<Item>) {
         if (items.size < 2) {
-            throw Exception("Cannot create outfit with less than 2 items")
+            throw OutfitCreationException("Cannot create outfit with less than 2 items")
         }
         else if (items.size > 5) {
-            throw Exception("Cannot create outfit with more than 5 items")
+            throw OutfitCreationException("Cannot create outfit with more than 5 items")
         }
         val bodyParts = items.map { it.category.bodyPart }
         if (bodyParts.size != bodyParts.distinct().size) {
-            throw Exception("Cannot create outfit with duplicate body parts")
+            throw OutfitCreationException("Cannot create outfit with duplicate body parts")
         }
     }
 
@@ -60,10 +62,10 @@ class OutfitService(
     fun addItemToOutfit(outfitUuid: UUID, itemUuid: UUID, toUser: User): OutfitDto {
         val outfit = outfitRepository.findOutfitByUuid(outfitUuid) ?: throw Exception(NOT_FOUND)
         if (outfit.user.uuid != toUser.uuid) {
-            throw Exception("Cannot add item to outfit: $outfitUuid, user: ${toUser.uuid} does not own the outfit.")
+            throw OutfitNotFoundException("Cannot add item to outfit: $outfitUuid, user: ${toUser.uuid} does not own the outfit.")
         }
         if (outfit.items.size > 5) {
-            throw Exception("Cannot add more than 5 items to outfit")
+            throw OutfitNotFoundException("Cannot add more than 5 items to outfit")
         }
         val item = itemRepository.findByUuid(itemUuid) ?: throw Exception("Item not found")
         outfit.items.add(item)
@@ -80,7 +82,7 @@ class OutfitService(
     fun getOutfitByUuid(uuid: UUID, user: User): OutfitDto {
         val outfit = outfitRepository.findOutfitByUuid(uuid) ?: throw Exception(NOT_FOUND)
         if (outfit.user.uuid != user.uuid) {
-            throw Exception("Cannot retrieve outfit: $uuid, user: ${user.uuid} does not own the outfit.")
+            throw OutfitNotFoundException("Cannot retrieve outfit: $uuid, user: ${user.uuid} does not own the outfit.")
         }
         return outfit.toDto()
     }
@@ -89,7 +91,7 @@ class OutfitService(
   fun updateOutfit(command: UpdateOutfitCommand, uuid: UUID, user: User): OutfitDto {
       val outfit = outfitRepository.findOutfitByUuid(uuid) ?: throw Exception(NOT_FOUND)
       if (outfit.user.uuid != user.uuid) {
-          throw Exception("Cannot update outfit: $uuid, user: ${user.uuid} does not own the outfit.")
+          throw OutfitNotFoundException("Cannot update outfit: $uuid, user: ${user.uuid} does not own the outfit.")
       }
       outfit.name = command.name
       outfit.items = command.items.mapNotNull { itemRepository.findByUuid(it) }.toMutableList()
@@ -102,7 +104,7 @@ class OutfitService(
     fun deleteOutfit(uuid: UUID, user: User) {
           val outfit = outfitRepository.findOutfitByUuid(uuid) ?: throw Exception(NOT_FOUND)
             if (outfit.user.uuid != user.uuid) {
-                throw Exception("Cannot delete outfit: $uuid, user: ${user.uuid} does not own the outfit.")
+                throw OutfitNotFoundException("Cannot delete outfit: $uuid, user: ${user.uuid} does not own the outfit.")
             }
             outfitRepository.delete(outfit)
             logger.info("Outfit deleted: $uuid")
@@ -112,7 +114,7 @@ class OutfitService(
     fun removeItemFromOutfit(outfitUuid: UUID, itemUuid: UUID, user: User): OutfitDto {
         val outfit = outfitRepository.findOutfitByUuid(outfitUuid) ?: throw Exception(NOT_FOUND)
         if (outfit.user.uuid != user.uuid) {
-            throw Exception("Cannot delete item from outfit: $outfitUuid, user: ${user.uuid} does not own the outfit.")
+            throw OutfitNotFoundException("Cannot delete item from outfit: $outfitUuid, user: ${user.uuid} does not own the outfit.")
         }
         val item = itemRepository.findByUuid(itemUuid) ?: throw Exception("Item not found")
         outfit.items.remove(item)
@@ -127,7 +129,7 @@ class OutfitService(
 
     @Transactional
     fun getOutfitByName(name: String, user: User): OutfitDto {
-        val outfit = outfitRepository.findOutfitByName(name) ?: throw Exception("No outfit found with name: $name")
+        val outfit = outfitRepository.findOutfitByName(name) ?: throw OutfitNotFoundException("No outfit found with name: $name")
         return outfit.toDto()
     }
 
@@ -135,7 +137,7 @@ class OutfitService(
     fun duplicateOutfit(outfitUuid: UUID, user: User): OutfitDto {
         val outfit = outfitRepository.findOutfitByUuid(outfitUuid) ?: throw Exception(NOT_FOUND)
         if (outfit.user.uuid != user.uuid) {
-            throw Exception("Cannot duplicate outfit: $outfitUuid, user: ${user.uuid} does not own the outfit.")
+            throw OutfitNotFoundException("Cannot duplicate outfit: $outfitUuid, user: ${user.uuid} does not own the outfit.")
         }
         val duplicateOutfit = Outfit(
             id = null,
@@ -159,7 +161,7 @@ class OutfitService(
         val missingBodyParts = itemsByBodyPart.filter { it.value.isEmpty() }.keys
         when {
             missingBodyParts.isNotEmpty() -> {
-                throw IllegalStateException("Not enough items to generate a random outfit for body parts: $missingBodyParts")
+                throw OutfitCreationException("Not enough items to generate a random outfit for body parts: $missingBodyParts")
             }
             else -> {
                 val randomItems = itemsByBodyPart.map { (_, items) ->
