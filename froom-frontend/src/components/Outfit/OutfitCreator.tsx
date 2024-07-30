@@ -41,7 +41,7 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
             toast.success('Outfit created');
         }).catch(error => {
             console.error(error);
-            toast.error('Error creating outfit');
+            toast.error(error.message);
         });
     }
 
@@ -65,6 +65,7 @@ const OutfitCreator: React.FC<OutfitCreatorProps> = ({isAddOutfitDialogOpen: isA
             onOutfitUpdated();
         }).catch(error => {
             console.error(error);
+            toast.error(error.message);
         });
     };
 

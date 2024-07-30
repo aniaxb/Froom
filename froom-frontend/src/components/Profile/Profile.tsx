@@ -34,8 +34,8 @@ const Profile = () => {
             setEmail(response.email)
         }).catch(error => {
             console.error(error);
-            toast.error('Error fetching User data');
-        })
+            toast.error(error.message);
+        });
     }
 
     useEffect(() => {
@@ -48,7 +48,7 @@ const Profile = () => {
             toast.success('User data updated');
         }).catch(error => {
             console.error(error);
-            toast.error('Error updating User data');
+            toast.error(error.message);
         });
     }
 
@@ -59,7 +59,7 @@ const Profile = () => {
             fetchUserData();
         }).catch(error => {
             console.error(error);
-            toast.error('Error updating password');
+            toast.error(error.message);
         });
     }
 
@@ -69,7 +69,7 @@ const Profile = () => {
             toast.success('User deleted');
         }).catch(error => {
             console.error(error);
-            toast.error('Error deleting User');
+            toast.error(error.message);
         });
     }
 

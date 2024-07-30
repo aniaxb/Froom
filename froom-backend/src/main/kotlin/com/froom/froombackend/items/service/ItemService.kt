@@ -1,5 +1,7 @@
 package com.froom.froombackend.items.service
 
+import com.froom.froombackend.exceptions.type.ItemCreationException
+import com.froom.froombackend.exceptions.type.ItemNotFoundException
 import com.froom.froombackend.items.model.command.UpdateItemCommand
 import com.froom.froombackend.items.model.domain.BodyPart
 import com.froom.froombackend.items.model.domain.Category
@@ -42,7 +44,7 @@ class ItemService (
         logger.info("Item retrieved: $uuid")
         val item = itemRepository.findByUuid(uuid) ?: throw Exception(NOT_FOUND)
         if (item.user.uuid != user.uuid) {
-            throw Exception("Cannot retrieve item: $uuid, user: ${user.uuid} does not own the item.")
+            throw ItemNotFoundException("Cannot retrieve item: $uuid, user: ${user.uuid} does not own the item.")
         }
         return item.toDto()
     }
@@ -73,7 +75,7 @@ class ItemService (
             itemRepository.save(item).toDto()
 
         } catch (e: Exception) {
-            throw Exception("Error creating item: ${e.message}")
+            throw ItemCreationException("Error creating item: ${e.message}")
         }
     }
 
@@ -98,7 +100,7 @@ class ItemService (
     fun deleteItem(uuid: UUID, user: User) {
         val item = itemRepository.findByUuid(uuid) ?: throw Exception(NOT_FOUND)
         if (item.user.uuid != user.uuid) {
-            throw Exception("Cannot delete item: $uuid, user: ${user.uuid} does not own the item.")
+            throw ItemNotFoundException("Cannot delete item: $uuid, user: ${user.uuid} does not own the item.")
         }
         itemRepository.delete(item)
         logger.info("Item deleted: $uuid")
@@ -108,7 +110,7 @@ class ItemService (
     fun updateItem(command: UpdateItemCommand, uuid: UUID, user: User): ItemDto {
         val item = itemRepository.findByUuid(uuid) ?: throw Exception(NOT_FOUND)
         if (item.user.uuid != user.uuid) {
-            throw Exception("Cannot update item: $uuid, user: ${user.uuid} does not own the item.")
+            throw ItemNotFoundException("Cannot update item: $uuid, user: ${user.uuid} does not own the item.")
         }
         item.category = command.category
         item.bodyPart = command.bodyPart
@@ -121,7 +123,7 @@ class ItemService (
     fun updateItemImage(file: MultipartFile, uuid: UUID, user: User): ItemDto {
         val item = itemRepository.findByUuid(uuid) ?: throw Exception(NOT_FOUND)
         if (item.user.uuid != user.uuid) {
-            throw Exception("Cannot update item: $uuid, user: ${user.uuid} does not own the item.")
+            throw ItemNotFoundException("Cannot update item: $uuid, user: ${user.uuid} does not own the item.")
         }
         item.image = file.bytes
         item.imageFormat = file.contentType!!

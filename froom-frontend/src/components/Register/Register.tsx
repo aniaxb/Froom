@@ -1,5 +1,5 @@
 import {Link, useNavigate} from 'react-router-dom';
-import {Input, Typography} from '@material-tailwind/react';
+import {Button, Input, Typography} from '@material-tailwind/react';
 import {useState} from 'react';
 import {UserApi} from '../../apis/UserApi.ts';
 import { toast } from 'react-hot-toast';
@@ -17,15 +17,21 @@ const Register = () => {
     }
 
     const handleRegisterRequest = () => {
-       UserApi.registerUser(firstName, lastName, username, email, password).then(response => {
-            console.log(response);
-            navigate('/');
-            toast.success('User registered');
-        }).catch(error => {
-            console.error(error);
-            toast.error('Error registering User');
-       });
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            toast.error('Password must have at least 8 characters, one uppercase, one lowercase and one number.');
+        } else {
+            UserApi.registerUser(firstName, lastName, username, email, password).then(response => {
+                console.log(response);
+                navigate('/');
+                toast.success('User registered');
+            }).catch(error => {
+                console.error(error);
+                toast.error(error.message);
+            });
+        }
     }
+
     return (
         <>
             <div className="mt-2 right-10 absolute flex flex-col justify-center items-center gap-4">
@@ -78,9 +84,20 @@ const Register = () => {
                                     />
                                 </div>
                                 <div className="w-3/4">
-                                    <Input type="password" label="Password"
-                                           value={password}
-                                           onChange={e => setPassword(e.target.value)}
+                                    {/*<Input type="password" label="Password"*/}
+                                    {/*       value={password}*/}
+                                    {/*       onChange={e => setPassword(e.target.value)}*/}
+                                    {/*/>*/}
+                                    <Input
+                                        type="password"
+                                        label="Password"
+                                        value={password}
+                                        onChange={e => {
+                                            //check if password has at least 8 characters, one uppercase, one lowercase and one number
+
+                                            setPassword(e.target.value)
+                                        }
+                                        }
                                     />
                                     <Typography
                                         variant="small"
@@ -101,6 +118,9 @@ const Register = () => {
                                         </svg>
                                         Use at least 8 characters, one uppercase, one lowercase and one number.
                                     </Typography>
+                                </div>
+                                <div className="w-3/4">
+                                    <Button onClick={handleRegisterRequest} className="w-full bg-tearose text-blue-gray-900">Sign up</Button>
                                 </div>
                             </div>
                         </form>

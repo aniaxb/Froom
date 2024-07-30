@@ -84,7 +84,7 @@ const NavBar = () => {
                                         size="lg"
                                         className="hidden lg:inline-block bg-darkcyan"
                                     >
-                                        <span>Sign In</span>
+                                        <span>Sign Up</span>
                                     </Button>
                                 </NavLink>
                             </div>
@@ -197,7 +197,7 @@ const NavBar = () => {
                                     </NavLink>
                                     <NavLink to="/register" className="w-1/2">
                                         <Button fullWidth variant="gradient" size="sm" className="">
-                                            <span>Sign In</span>
+                                            <span>Sign Up</span>
                                         </Button>
                                     </NavLink>
                                 </div>

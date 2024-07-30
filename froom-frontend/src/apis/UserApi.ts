@@ -11,6 +11,12 @@ export class UserApi {
             password: password
         }).then(response => {
             return response.data
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error registering User');
+            }
         })
     }
 
@@ -35,7 +41,13 @@ export class UserApi {
             }
         }).then(response => {
             return response.data
-        })
+        }).catch(error => {
+                if (error.response && error.response.data && error.response.data.message) {
+                    throw new Error(error.response.data.message);
+                } else {
+                    throw new Error('Error updating User');
+                }
+            })
     }
 
     static updatePassword(oldPassword: string, newPassword: string, newPasswordConfirmation: string): Promise<void> {
@@ -49,7 +61,14 @@ export class UserApi {
             }
         }).then(response => {
             return response.data
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error updating password');
+            }
         })
+
     }
 
     static deleteUser(): Promise<void> {
@@ -59,6 +78,12 @@ export class UserApi {
             }
         }).then(response => {
             return response.data
+        }).catch(error => {
+            if (error.response && error.response.data && error.response.data.message) {
+                throw new Error(error.response.data.message);
+            } else {
+                throw new Error('Error deleting User');
+            }
         })
     }
 

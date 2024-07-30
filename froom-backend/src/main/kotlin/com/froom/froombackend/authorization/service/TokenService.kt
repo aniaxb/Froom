@@ -1,6 +1,7 @@
 package com.froom.froombackend.authorization.service
 
 import com.froom.froombackend.authorization.model.dto.TokenDto
+import com.froom.froombackend.exceptions.type.TokenException
 import com.froom.froombackend.user.model.domain.User
 import com.froom.froombackend.user.service.UserService
 import com.froom.froombackend.user.util.toDto
@@ -49,11 +50,11 @@ class TokenService(
             val uuid: UUID = getUUIDFromClaim(jwt)
             val isRefresh = jwt.claims[REFRESH] as? Boolean
             if (isRefresh != null && isRefresh) {
-                throw Exception("Invalid token: Refresh token not allowed.")
+                throw TokenException("Invalid token: Refresh token not allowed.")
             }
             userService.findByUuid(uuid)
         } catch (e: Exception) {
-            throw Exception(INVALID_TOKEN)
+            throw TokenException(INVALID_TOKEN)
         }
     }
 
@@ -63,11 +64,11 @@ class TokenService(
             val uuid: UUID = getUUIDFromClaim(jwt)
             val isRefresh = jwt.claims[REFRESH] as? Boolean
             if (isRefresh != null && !isRefresh) {
-                throw Exception("Invalid token: Access token not allowed.")
+                throw TokenException("Invalid token: Access token not allowed.")
             }
-            userService.findByUuid(uuid) ?: throw Exception("Invalid token: User not found.")
+            userService.findByUuid(uuid) ?: throw TokenException("Invalid token: User not found.")
         } catch (e: Exception) {
-            throw Exception(INVALID_TOKEN)
+            throw TokenException(INVALID_TOKEN)
         }
     }
 
@@ -79,7 +80,7 @@ class TokenService(
         return when (val uuidClaim = jwt.claims[UUID_SIGNATURE]) {
             is String -> UUID.fromString(uuidClaim)
             is UUID -> uuidClaim
-            else -> throw Exception("Unexpected type for UUID claim")
+            else -> throw TokenException("Unexpected type for UUID claim")
         }
     }
 

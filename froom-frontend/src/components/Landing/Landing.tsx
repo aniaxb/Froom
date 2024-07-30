@@ -33,7 +33,7 @@ const Landing = () => {
                                     </ListItemPrefix>
                                     <span className="font-bold mr-2">Virtual Wardrobe Organization:</span> Keep track of
                                     all your clothing items in one convenient place. Easily categorize your wardrobe by
-                                    clothing type, color, season, and more.</ListItem>
+                                    clothing type and color.</ListItem>
                                 <ListItem className="p-4 bg-lightblue">
                                     <ListItemPrefix className="lg:inline hidden">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -80,7 +80,7 @@ const Landing = () => {
                         <div className="lg:w-1/5 bg-tearose p-8 rounded-lg flex flex-col gap-4 shadow-lg">
                             <Typography variant="h3">Step 1: Sign Up</Typography>
                             <Typography variant="paragraph">Create your Froom account in seconds. Simply provide your
-                                email address and set a password to get started.</Typography>
+                                name, username, email address and set a password to get started.</Typography>
                         </div>
                         <div className="lg:w-1/5 bg-tearose p-8 rounded-lg flex flex-col gap-4 shadow-lg">
                             <Typography variant="h3">Step 2: Add Your Clothing</Typography>
@@ -90,11 +90,12 @@ const Landing = () => {
                         </div>
                         <div className="lg:w-1/5 bg-tearose p-8 rounded-lg flex flex-col gap-4 shadow-lg">
                             <Typography variant="h3">Step 3: Organize Clothes</Typography>
-                            <Typography variant="paragraph">Filter your wardrobe by categories and attributes to streamline outfit planning. </Typography>
+                            <Typography variant="paragraph">Filter your wardrobe by categories and color to streamline outfit planning. </Typography>
                         </div>
                         <div className="lg:w-1/5 bg-tearose p-8 rounded-lg flex flex-col gap-4 shadow-lg">
-                            <Typography variant="h3">Step 4: Explore Outfit Generator</Typography>
-                            <Typography variant="paragraph">Use our visual outfit creator to mix and match clothing items and create stylish ensembles.</Typography>
+                            <Typography variant="h3">Step 4: Explore Outfit Creator</Typography>
+                            <Typography variant="paragraph">Use our visual outfit creator to mix and match clothing items and create stylish ensembles.
+                                Try our random outfit generator for unexpected and exciting looks.</Typography>
                         </div>
                         <div className="lg:w-1/5 bg-tearose p-8 rounded-lg flex flex-col gap-4 shadow-lg">
                             <Typography variant="h3">Step 5: Enjoy Your Virtual Wardrobe</Typography>

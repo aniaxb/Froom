@@ -3,6 +3,7 @@ package com.froom.froombackend.authorization.service
 import com.froom.froombackend.authorization.model.command.LoginAuthCommand
 import com.froom.froombackend.authorization.model.command.RefreshAuthCommand
 import com.froom.froombackend.authorization.model.dto.TokenDto
+import com.froom.froombackend.exceptions.type.InvalidCredentialsException
 import com.froom.froombackend.user.model.domain.User
 import com.froom.froombackend.user.service.UserService
 import org.springframework.stereotype.Service
@@ -17,7 +18,7 @@ class AuthorizationService(
     fun login(command: LoginAuthCommand): TokenDto {
         val user = userService.findByEmail(command.email)
         if (user == null || !hashService.checkBcrypt(command.password, user.password)) {
-            throw Exception("Invalid credentials")
+            throw InvalidCredentialsException("Invalid credentials")
         }
         return tokenService.generateToken(user)
     }
