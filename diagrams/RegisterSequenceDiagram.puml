@@ -7,9 +7,6 @@ participant "Przeglądarka" as Browser
 participant "Serwer" as Server
 
 User -> Browser: Otwórz stronę rejestracji
-Browser -> Server: Wyślij żądanie otwarcia strony rejestracji
-activate Server
-Server -> Browser: Wyślij stronę rejestracji
 deactivate Server
 Browser -> User: Pokaż stronę rejestracji
 User -> Browser: Wypełnij formularz rejestracyjny i wyślij go
@@ -23,12 +20,6 @@ else niepoprawny
     Server -> Browser: Wyślij wiadomość o błędzie
     Browser -> User: Pokaż wiadomość o błędzie
 end
-deactivate Server
-User -> Browser: Przekieruj na stronę garderoby
-Browser -> Server: Wyślij żądanie przekierowania na stronę garderoby
-activate Server
-Server -> Browser: Przekieruj na stronę garderoby
-Browser -> User: Pokaż stronę garderoby
 deactivate Server
 
 @enduml

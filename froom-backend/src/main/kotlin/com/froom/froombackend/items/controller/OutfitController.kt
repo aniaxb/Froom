@@ -103,7 +103,7 @@ class OutfitController(val outfitService: OutfitService) {
 
     @GetMapping("/{outfitUuid}/items")
     fun getOutfitItems(
-        @RequestParam(required = true) outfitUuid: UUID
+        @PathVariable outfitUuid: UUID
     ): ResponseEntity<List<ItemDto>> {
         return ResponseEntity<List<ItemDto>>(outfitService.getOutfitItems(outfitUuid),
             HttpStatus.OK)

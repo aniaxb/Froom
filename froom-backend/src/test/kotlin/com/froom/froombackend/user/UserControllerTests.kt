@@ -1,19 +1,14 @@
-import org.junit.jupiter.api.BeforeEach
+package com.froom.froombackend.user
+
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.froom.froombackend.BaseTest
-import com.froom.froombackend.FroomBackendApplication
 import com.froom.froombackend.user.model.command.RegisterUserCommand
 import com.froom.froombackend.user.model.command.UpdatePasswordCommand
-import org.junit.jupiter.api.AfterEach
-
+import com.froom.froombackend.user.model.command.UpdateUserCommand
 
 class UserControllerTests: BaseTest() {
     private val objectMapper: ObjectMapper = ObjectMapper()
@@ -37,9 +32,13 @@ class UserControllerTests: BaseTest() {
             MockMvcRequestBuilders.post("/user/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(RegisterUserCommand(
-                    email = "", password = "", firstName = "", lastName = "", username = "")))
+                    email = "johndoe123@example.com", password = "Password1234@", firstName = "John", lastName = "Doe", username = "johndoe")))
         )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(MockMvcResultMatchers.status().isCreated)
+
+        val newUserToken = testHelper.getAuthToken("johndoe123@example.com", "Password1234@")
+
+        deleteUserWithToken(newUserToken)
     }
 
     @Test
@@ -49,23 +48,14 @@ class UserControllerTests: BaseTest() {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     objectMapper.writeValueAsString(
-                        RegisterUserCommand(
-                            email = "", password = "", firstName = "", lastName = "", username = ""
+                        UpdateUserCommand(
+                            email = "johnsmith@example.com", firstName = "John", lastName = "Smith", username = "johnsmith"
                         )
                     )
                 )
                 .header("Authorization", "Bearer $token")
         )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest)
-    }
-
-    @Test
-    fun `test deleteUser` () {
-        mockMvc.perform(
-            MockMvcRequestBuilders.delete("/user")
-                .header("Authorization", "Bearer $token")
-        )
-            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.status().isAccepted)
     }
 
     @Test
@@ -76,15 +66,40 @@ class UserControllerTests: BaseTest() {
                 .content(
                     objectMapper.writeValueAsString(
                         UpdatePasswordCommand(
-                            oldPassword = "", newPassword = "", newPasswordConfirmation = ""
+                            oldPassword = "Pass1234@", newPassword = "Password4321#", newPasswordConfirmation = "Password4321#"
                         )
                     )
                 )
                 .header("Authorization", "Bearer $token")
         )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(MockMvcResultMatchers.status().isAccepted)
     }
 
+    @Test
+    fun `test deleteUser` () {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(RegisterUserCommand(
+                    email = "johndoe123@example.com", password = "Password1234@", firstName = "John", lastName = "Doe", username = "johndoe")))
+        )
+            .andExpect(MockMvcResultMatchers.status().isCreated)
 
+        val newUserToken = testHelper.getAuthToken("johndoe123@example.com", "Password1234@")
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/user")
+                .header("Authorization", "Bearer $newUserToken")
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+    }
+
+    fun deleteUserWithToken(userToken: String) {
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/user")
+                .header("Authorization", "Bearer $userToken")
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+    }
 
 }
