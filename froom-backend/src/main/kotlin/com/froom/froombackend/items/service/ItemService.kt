@@ -90,7 +90,7 @@ class ItemService (
             image = file.bytes,
             imageFormat = file.contentType!!
         )
-        logger.info("Item created: $item")
+        logger.info("Item created without DA: $item")
         return itemRepository.save(item).toDto()
     }
 

@@ -178,11 +178,11 @@ class OutfitService(
         }
     }
 
-    fun getSimilarItemsToBaseItemByColor(baseItem: Item, items: List<Item>): List<Item> {
-        val itemByBodyPart = items.groupBy { it.category.bodyPart }
-        val similarItems = mutableListOf<Item>()
-        similarItems.add(baseItem)
-        itemByBodyPart.filterKeys { it != baseItem.category.bodyPart }
-        return similarItems
-    }
+//    fun getSimilarItemsToBaseItemByColor(baseItem: Item, items: List<Item>): List<Item> {
+//        val itemByBodyPart = items.groupBy { it.category.bodyPart }
+//        val similarItems = mutableListOf<Item>()
+//        similarItems.add(baseItem)
+//        itemByBodyPart.filterKeys { it != baseItem.category.bodyPart }
+//        return similarItems
+//    }
 }

@@ -23,8 +23,8 @@ abstract class BaseTest {
 
     @BeforeEach
     fun globalSetUp() {
-        testHelper.registerUser("janedoe@example.com", "pass123", "Jane", "Doe", "janedoe")
-        token = testHelper.getAuthToken("janedoe@example.com", "pass123")
+        testHelper.registerUser("janedoe@example.com", "Pass1234@", "Jane", "Doe", "janedoe")
+        token = testHelper.getAuthToken("janedoe@example.com", "Pass1234@")
     }
 
     @AfterEach

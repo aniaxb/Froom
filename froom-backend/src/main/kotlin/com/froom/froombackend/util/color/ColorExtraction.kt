@@ -20,8 +20,9 @@ class ColorExtraction(environment: Environment): BaseAdapter() {
 
         val response = createApi(baseUrlKey).create(ColorExtractionAPI::class.java).extractColor(filePart).execute()
         if (!response.isSuccessful) {
-            logger.error("Error while getting color: ${response.code()} - ${response.message()}")
-            throw IOException("Error while getting color: ${response.code()} - ${response.message()}")
+            val errorMessage = "Error while getting color: ${response.code()} - ${response.message()}"
+            logger.error(errorMessage)
+            throw IOException(errorMessage)
         }
 
         val body = response.body() ?: throw IOException("Empty response body")

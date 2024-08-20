@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit
 abstract class BaseAdapter {
     protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
     protected abstract val baseUrlKey: String
-
-    protected fun createApi(baseUrl: String): Retrofit {
+//protected fun
+    fun createApi(baseUrl: String): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(
