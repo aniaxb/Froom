@@ -3,14 +3,21 @@
 component Backend {
 
     class User {
-        - uuid: int
+        - uuid: UUID
+        - firstName: String
+        - lastName: String
         - username: String
         - email : String
-        - password : String
+    }
+
+    class Outfit {
+        - uuid: UUID
+        - name: String
+        - items: Item[]
     }
 
     class Item {
-        - uuid: int
+        - uuid: UUID
         - color : String[]
         - category: Category
         - bodyPart: BodyPart
@@ -19,26 +26,26 @@ component Backend {
     }
 
     class Category {
-        - uuid: int
+        - uuid: UUID
         - name: String
+        - bodyPart: BodyPart
+        - index: int
     }
 
-    class BodyPart {
-        - uuid: int
-        - name: String
+    enum BodyPart {
+        TOP
+        BOTTOM
+        SHOES
+        ACCESSORY
+        UNKNOWN
     }
 
-    class Outfit {
-        - uuid: int
-        - items: Item[]
-        - user: User
-    }
-
-    User "1" -- "0..*" Outfit
-    Outfit "1" -- "0..*" Item
-    User "1" -- "0..*" Item
-    Item "1" -- "0..1" Category
-    Item "1" -- "0..1" BodyPart
+    User "1" -down- "0..*" Outfit : has
+    User "1" -down- "0..*" Item : has
+    Outfit "0..*" -down- "0..*" Item : contains
+    Item "1" -right- "0..1" Category : categorized
+    Item "1" -right- "0..1" BodyPart : associated
+    Category -down-> BodyPart : has
 }
 
 @enduml

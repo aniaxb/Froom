@@ -1,20 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import App from './App'
 import './index.css'
 import {ThemeProvider} from '@material-tailwind/react';
 import {
     createBrowserRouter,
     RouterProvider,
 } from 'react-router-dom';
-import Wardrobe from './components/Wardrobe/Wardrobe.tsx';
-import About from './components/About/About.tsx';
-import Contact from './components/Contact/Contact.tsx';
-import Login from './components/Login/Login.tsx';
-import Register from './components/Register/Register.tsx';
-import Profile from './components/Profile/Profile.tsx';
+import Wardrobe from './components/Wardrobe/Wardrobe';
+import About from './components/About/About';
+import Contact from './components/Contact/Contact';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import Profile from './components/Profile/Profile';
 import {Toaster} from 'react-hot-toast';
-import AuthWrapper from './AuthWrapper.tsx';
+import AuthWrapper from './AuthWrapper';
 
 const router = createBrowserRouter([
     {

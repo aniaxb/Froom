@@ -1,8 +1,21 @@
 # Use the official OpenJDK base image
-FROM openjdk:11-jre-slim
+FROM openjdk:17-slim
 
 # Set the working directory inside the container
 WORKDIR /app
+
+# Install required dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl unzip && \
+    rm -rf /var/lib/apt/lists/*
+
+# Download and install Gradle
+RUN curl -L https://services.gradle.org/distributions/gradle-7.4-bin.zip -o gradle.zip && \
+    unzip gradle.zip && \
+    rm gradle.zip && \
+    mv gradle-7.4 /usr/local && \
+    ln -s /usr/local/gradle-7.4/bin/gradle /usr/local/bin/gradle && \
+    gradle --version
 
 # Copy Gradle files
 COPY build.gradle.kts settings.gradle.kts /app/
@@ -11,17 +24,6 @@ COPY build.gradle.kts settings.gradle.kts /app/
 RUN mkdir -p build/src/main
 COPY src/main/resources /app/src/main/resources
 COPY build/libs /app/build/libs
-
-# Download and install Gradle
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl && \
-    rm -rf /var/lib/apt/lists/* && \
-    curl -L https://services.gradle.org/distributions/gradle-7.3.3-bin.zip -o gradle.zip && \
-    unzip gradle.zip && \
-    rm gradle.zip && \
-    mv gradle-7.3.3 /usr/local && \
-    ln -s /usr/local/gradle-7.3.3/bin/gradle /usr/local/bin/gradle && \
-    gradle --version
 
 # Build the application
 RUN gradle build
