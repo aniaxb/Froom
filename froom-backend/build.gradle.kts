@@ -9,6 +9,10 @@ plugins {
 	id("jacoco")
 }
 
+springBoot {
+	mainClass.set("com.froom.froombackend.FroomApplication")
+}
+
 group = "com.froom"
 version = "0.0.1-SNAPSHOT"
 
