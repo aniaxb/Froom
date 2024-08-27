@@ -31,7 +31,7 @@ To build containers in Docker run command below:
 ```
 docker-compose build
 ```
-To run created containers run:
+To run created containers use command:
 ```
 docker-compose up
 ```
