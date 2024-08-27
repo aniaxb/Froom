@@ -1,27 +1,44 @@
-# React + TypeScript + Vite
+# Froom Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Froom Frontend** is a modern, responsive web application built with TypeScript, React, Vite, Tailwind CSS, and Material Tailwind. The project aims to help users manage their wardrobe virtually.
 
-Currently, two official plugins are available:
+### Features
+- **Responsive Design**: Optimized for all screen sizes using Tailwind CSS.
+- **Material Design**: Utilizes Material Tailwind for a consistent and sleek UI.
+- **High Performance**: Developed with Vite for fast builds and optimized performance.
+- **Type Safety**: TypeScript ensures type safety throughout the project.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Technologies Used
+- **React**: A JavaScript library for building user interfaces.
+- **TypeScript**: A superset of JavaScript that adds static types.
+- **Vite**: A next-generation front-end tooling for modern web projects.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **Material Tailwind**: A Tailwind CSS component library based on Material Design.
+- **React Hot Toast**: Library for UI notifications
+- **ESLint**: A tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+### Installation
+Install the dependencies:
+```
+npm install
+```
+or
+```
+yarn install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+#### Running the Project:
+```
+npm run dev
+```
+or
+```
+yarn dev
+```
+
+<p align="center">
+   <img src="https://github.com/user-attachments/assets/b5fc8486-f5f7-4e80-921a-c5087626d4d3" alt="Image 2" width="200" />
+   <img src="https://github.com/user-attachments/assets/836b02a7-e114-461c-af03-c2264c9635b3" alt="Image 1" width="200" />
+   <img src="https://github.com/user-attachments/assets/a193ca79-340a-4692-b9b4-56a66f9e2530" alt="Image 3" width="200" />
+</p>
+
