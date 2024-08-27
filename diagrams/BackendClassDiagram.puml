@@ -26,7 +26,6 @@ component Backend {
     }
 
     class Category {
-        - uuid: UUID
         - name: String
         - bodyPart: BodyPart
         - index: int
