@@ -24,7 +24,7 @@
 ## Prerequisities
 
 - Docker - version 20.10.x and higher
-- Docker Compose version 3.8. or higher
+- Docker Compose - version 3.8. or higher
 
 ## Installation
 To build containers in Docker run command below:
